@@ -89,13 +89,13 @@ public class Rectangle implements Drawable {
 	}
 
 	@Override
-	public BasicStroke getStroke() {
-		return stroke;
+	public float getStrokeWidth() {
+		return stroke.getLineWidth();
 	}
 	
 	@Override
-	public void setStroke( BasicStroke stroke ) {
-		this.stroke = stroke;
+	public void setStrokeWidth( float strokeWidth ) {
+		this.stroke = new BasicStroke( strokeWidth );
 	}
 
 	@Override

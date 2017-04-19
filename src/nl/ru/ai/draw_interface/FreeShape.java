@@ -76,16 +76,16 @@ public class FreeShape implements Drawable {
 	}
 
 	@Override
-	public BasicStroke getStroke() {
-		return stroke;
+	public float getStrokeWidth() {
+		return stroke.getLineWidth();
 	}
 
 	@Override
-	public void setStroke( BasicStroke stroke ) {
-		this.stroke = stroke;
+	public void setStrokeWidth( float strokeWidth ) {
+		stroke = new BasicStroke( strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
 
 		for ( Line l : shape ) {
-			l.setStroke( stroke );
+			l.setStrokeWidth( strokeWidth );
 		}
 	}
 
@@ -135,7 +135,7 @@ public class FreeShape implements Drawable {
 	@Override
 	public void setTranslation( Point2D translation ) {
 		this.translation = translation;
-
+		
 		for ( Line l : shape ) {
 			l.setTranslation( translation );
 		}
@@ -339,8 +339,7 @@ public class FreeShape implements Drawable {
 
 	private void scalePoints( ArrayList<Point> points, int endSize ) {
 		Point2D size = getSize();
-		double scaleX = (double)( endSize - 1 ) / size.getX();
-		double scaleY = (double)( endSize - 1 ) / size.getY();
+		double scale = Math.max( size.getX(), size.getY() ) / ( (double)endSize - 1 );
 		Rectangle2D bounds = getBounds();
 		int minX = (int)bounds.getMinX();
 		int minY = (int)bounds.getMinY();
@@ -350,8 +349,8 @@ public class FreeShape implements Drawable {
 
 			p.x -= minX;
 			p.y -= minY;
-			p.x *= scaleX;
-			p.y *= scaleY;
+			p.x /= scale;
+			p.y /= scale;
 		}
 	}
 
@@ -375,6 +374,8 @@ public class FreeShape implements Drawable {
 		for ( Point p : points ) {
 			vector.vector.set( p.y * MAPVECTOR_SIZE + p.x, 1.0d );
 		}
+
+		vector.center();
 
 		return vector;
 	}

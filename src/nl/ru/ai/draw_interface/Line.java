@@ -32,7 +32,7 @@ public class Line implements Drawable {
 		this.line = null;
 		this.lineColor = lineColor;
 		this.fillColor = fillColor;
-		setStroke( stroke );
+		this.stroke = stroke;
 	}
 
 	@Override
@@ -83,13 +83,13 @@ public class Line implements Drawable {
 	}
 
 	@Override
-	public BasicStroke getStroke() {
-		return stroke;
+	public float getStrokeWidth() {
+		return stroke.getLineWidth();
 	}
 	
 	@Override
-	public void setStroke( BasicStroke stroke ) {
-		this.stroke = new BasicStroke( stroke.getLineWidth(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+	public void setStrokeWidth( float strokeWidth ) {
+		this.stroke = new BasicStroke( strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.CAP_ROUND );
 	}
 
 	@Override

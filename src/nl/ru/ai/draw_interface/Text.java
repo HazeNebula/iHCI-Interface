@@ -1,6 +1,5 @@
 package nl.ru.ai.draw_interface;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -72,12 +71,12 @@ public class Text implements Drawable {
 	}
 
 	@Override
-	public BasicStroke getStroke() {
-		return new BasicStroke( 1.0f );
+	public float getStrokeWidth() {
+		return 0.0f;
 	}
-	
+
 	@Override
-	public void setStroke( BasicStroke stroke ) {
+	public void setStrokeWidth( float strokeWidth ) {
 		return;
 	}
 

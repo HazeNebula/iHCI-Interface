@@ -1,6 +1,5 @@
 package nl.ru.ai.draw_interface;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -45,12 +44,12 @@ public class Image implements Drawable {
 	}
 	
 	@Override
-	public BasicStroke getStroke() {
-		return new BasicStroke( 0.0f );
+	public float getStrokeWidth() {
+		return 0.0f;
 	}
 
 	@Override
-	public void setStroke( BasicStroke stroke ) {
+	public void setStrokeWidth( float strokeWidth ) {
 		return;
 	}
 
