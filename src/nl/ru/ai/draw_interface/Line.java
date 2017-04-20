@@ -3,7 +3,6 @@ package nl.ru.ai.draw_interface;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
@@ -11,10 +10,11 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 public class Line implements Drawable {
-	private static final int HITBOX_SIZE = 40;
+	private static final int HITBOX_SIZE = 25;
 
-	private Shape line;
-	private double x1, y1, x2, y2, angle;
+	private Line2D line;
+	private Point2D[] points;
+	private double angle;
 	private Point2D translation;
 	private Point2D scale;
 	private Color lineColor;
@@ -22,10 +22,9 @@ public class Line implements Drawable {
 	private BasicStroke stroke;
 
 	public Line( double x1, double y1, double x2, double y2, Color lineColor, Color fillColor, BasicStroke stroke ) {
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
+		points = new Point2D[2];
+		points[0] = new Point2D.Double( x1, y1 );
+		points[1] = new Point2D.Double( x2, y2 );
 		this.angle = 0.0d;
 		this.translation = new Point2D.Double();
 		this.scale = new Point2D.Double( 1.0d, 1.0d );
@@ -37,13 +36,13 @@ public class Line implements Drawable {
 
 	@Override
 	public void draw( Graphics2D g ) {
-		Line2D l = new Line2D.Double( x1, y1, x2, y2 );
-
 		AffineTransform t = AffineTransform.getTranslateInstance( getCenterX(), getCenterY() );
 		t.rotate( angle );
 		t.scale( scale.getX(), scale.getY() );
 		t.translate( -getCenterX(), -getCenterY() );
-		line = t.createTransformedShape( l );
+		Point2D[] newPoints = new Point2D[2];
+		t.transform( points, 0, newPoints, 0, 2 );
+		line = new Line2D.Double( newPoints[0].getX(), newPoints[0].getY(), newPoints[1].getX(), newPoints[1].getY() );
 
 		Color oldColor = g.getColor();
 		Stroke oldStroke = g.getStroke();
@@ -56,10 +55,9 @@ public class Line implements Drawable {
 		g.setStroke( oldStroke );
 	}
 
-	// TODO: fix contains function (using ptLineDist?)
 	@Override
 	public boolean contains( int x, int y ) {
-		return line.intersects( x - HITBOX_SIZE, y - HITBOX_SIZE, HITBOX_SIZE, HITBOX_SIZE );
+		return ( x >= getMinX() && x <= getMaxX() && y >= getMinY() && y <= getMaxY() && line.ptLineDist( (double)x, (double)y ) < HITBOX_SIZE );
 	}
 
 	@Override
@@ -109,17 +107,13 @@ public class Line implements Drawable {
 
 	@Override
 	public void setTranslation( Point2D translation ) {
-		x1 -= this.translation.getX();
-		y1 -= this.translation.getY();
-		x2 -= this.translation.getX();
-		y2 -= this.translation.getY();
+		points[0].setLocation( points[0].getX() - this.translation.getX(), points[0].getY() - this.translation.getY() );
+		points[1].setLocation( points[1].getX() - this.translation.getX(), points[1].getY() - this.translation.getY() );
 		
 		this.translation = translation;
 		
-		x1 += this.translation.getX();
-		y1 += this.translation.getY();
-		x2 += this.translation.getX();
-		y2 += this.translation.getY();
+		points[0].setLocation( points[0].getX() + this.translation.getX(), points[0].getY() + this.translation.getY() );
+		points[1].setLocation( points[1].getX() + this.translation.getX(), points[1].getY() + this.translation.getY() );
 	}
 
 	@Override
@@ -133,47 +127,47 @@ public class Line implements Drawable {
 	}
 
 	public double getX1() {
-		return x1;
+		return points[0].getX();
 	}
 
 	public double getY1() {
-		return y1;
+		return points[0].getY();
 	}
 
 	public double getX2() {
-		return x2;
+		return points[1].getX();
 	}
 
 	public double getY2() {
-		return y2;
+		return points[1].getY();
 	}
 
 	@Override
 	public double getMinX() {
-		return Math.min( x1, x2 );
+		return Math.min( points[0].getX(), points[1].getX() );
 	}
 
 	@Override
 	public double getMaxX() {
-		return Math.max( x1, x2 );
+		return Math.max( points[0].getX(), points[1].getX() );
 	}
 
 	@Override
 	public double getMinY() {
-		return Math.min( y1, y2 );
+		return Math.min( points[0].getY(), points[1].getY() );
 	}
 
 	@Override
 	public double getMaxY() {
-		return Math.max( y1, y2 );
+		return Math.max( points[0].getY(), points[1].getY() );
 	}
 
 	private double getWidth() {
-		return Math.abs( x2 - x1 );
+		return Math.abs( points[1].getX() - points[0].getX() );
 	}
 
 	private double getHeight() {
-		return Math.abs( y2 - y1 );
+		return Math.abs( points[1].getY() - points[0].getY() );
 	}
 
 	private double getCenterX() {
