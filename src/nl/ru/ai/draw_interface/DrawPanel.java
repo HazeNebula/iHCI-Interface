@@ -28,6 +28,7 @@ import nl.ru.ai.selforganisingmap.Polygon_t;
 import nl.ru.ai.selforganisingmap.SelfOrganisingMap;
 
 public class DrawPanel extends JPanel {
+	private static final Color BACKGROUNDCOLOR = Color.WHITE;
 	private static final int BUTTON_SIZE = 60;
 	private static final int BUTTON_GAP_SIZE = 10;
 	private static final Color BUTTONCOLOR_DEFAULT = new Color( 0xFFE0E0E0, true );
@@ -354,7 +355,7 @@ public class DrawPanel extends JPanel {
 		tool = Tool_t.RECOGNIZE_TOOL;
 		map = new SelfOrganisingMap( "map\\vectors.txt" );
 		lastCoords = new Point( 0, 0 );
-		
+
 		dragging = false;
 		shapeSet = false;
 
@@ -369,7 +370,7 @@ public class DrawPanel extends JPanel {
 		addMouseMotionListener( inputHandler );
 		selection = null;
 
-		this.setBackground( Color.WHITE );
+		this.setBackground( BACKGROUNDCOLOR );
 
 		moveButton = new JButton( new ImageIcon( "images\\icons\\MoveIcon.png" ) );
 		moveButton.setBackground( BUTTONCOLOR_DEFAULT );
@@ -421,15 +422,17 @@ public class DrawPanel extends JPanel {
 	private void createSelection( Drawable shape ) {
 		selection = new Selection( shape );
 
-		Point2D buttonCoords = selection.getButtonSpace( this.getPreferredSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
-		moveButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY(), BUTTON_SIZE, BUTTON_SIZE );
-		moveButton.setVisible( true );
-		resizeButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE + BUTTON_GAP_SIZE, BUTTON_SIZE, BUTTON_SIZE );
-		resizeButton.setVisible( true );
-		rotateButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 2 + BUTTON_GAP_SIZE * 2, BUTTON_SIZE, BUTTON_SIZE );
-		rotateButton.setVisible( true );
-		deleteButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 3 + BUTTON_GAP_SIZE * 3, BUTTON_SIZE, BUTTON_SIZE );
-		deleteButton.setVisible( true );
+		Point2D buttonCoords = selection.getButtonSpace( this.getSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
+		if ( buttonCoords != null ) {
+			moveButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY(), BUTTON_SIZE, BUTTON_SIZE );
+			moveButton.setVisible( true );
+			resizeButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE + BUTTON_GAP_SIZE, BUTTON_SIZE, BUTTON_SIZE );
+			resizeButton.setVisible( true );
+			rotateButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 2 + BUTTON_GAP_SIZE * 2, BUTTON_SIZE, BUTTON_SIZE );
+			rotateButton.setVisible( true );
+			deleteButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 3 + BUTTON_GAP_SIZE * 3, BUTTON_SIZE, BUTTON_SIZE );
+			deleteButton.setVisible( true );
+		}
 
 		backupLineColor = new Color( lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue(), lineColor.getAlpha() );
 		backupFillColor = new Color( fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue(), fillColor.getAlpha() );
@@ -446,7 +449,7 @@ public class DrawPanel extends JPanel {
 	}
 
 	private void updateSelection() {
-		Point2D buttonCoords = selection.getButtonSpace( this.getPreferredSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
+		Point2D buttonCoords = selection.getButtonSpace( this.getSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
 
 		if ( buttonCoords != null ) {
 			moveButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY(), BUTTON_SIZE, BUTTON_SIZE );
