@@ -50,6 +50,7 @@ public class DrawPanel extends JPanel {
 
 	private Point2D lastCoords;
 	private boolean dragging;
+	private boolean shapeSet;
 	private Tool_t tool;
 	private Selection selection;
 	private BasicStroke stroke;
@@ -176,7 +177,7 @@ public class DrawPanel extends JPanel {
 		public void mouseReleased( MouseEvent e ) {
 			switch ( tool ) {
 			case RECOGNIZE_TOOL:
-				if ( dragging ) {
+				if ( dragging && shapeSet ) {
 					if ( recognizeShape.isStraightLine() ) {
 						Point2D[] coords = recognizeShape.getEndPoints();
 						shapes.add( new Line( coords[0].getX(), coords[0].getY(), coords[1].getX(), coords[1].getY(), lineColor, fillColor, stroke ) );
@@ -262,6 +263,7 @@ public class DrawPanel extends JPanel {
 			case RECOGNIZE_TOOL:
 				if ( dragging ) {
 					recognizeShape.add( lastCoords.getX(), lastCoords.getY(), mouseCoords.getX(), mouseCoords.getY() );
+					shapeSet = true;
 				}
 
 				lastCoords = mouseCoords;
@@ -348,16 +350,19 @@ public class DrawPanel extends JPanel {
 		setLayout( null );
 
 		shapes = new ArrayList<Drawable>();
-		recognizeShape = new FreeShape( Color.BLACK, new Color( 0x00FFFFFF, true ), new BasicStroke( RECOGNIZE_STROKEWIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
+		recognizeShape = new FreeShape( Color.BLACK, new Color( 0x00FFFFFF, true ), new BasicStroke( RECOGNIZE_STROKEWIDTH ) );
 		tool = Tool_t.RECOGNIZE_TOOL;
 		map = new SelfOrganisingMap( "map\\vectors.txt" );
 		lastCoords = new Point( 0, 0 );
+		
+		dragging = false;
+		shapeSet = false;
 
 		lineColor = LINECOLOR_INIT;
 		backupLineColor = lineColor;
 		fillColor = FILLCOLOR_INIT;
 		backupFillColor = fillColor;
-		stroke = new BasicStroke( STROKEWIDTH_INIT, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+		stroke = new BasicStroke( STROKEWIDTH_INIT );
 		backupStroke = stroke;
 
 		addMouseListener( inputHandler );
@@ -416,7 +421,7 @@ public class DrawPanel extends JPanel {
 	private void createSelection( Drawable shape ) {
 		selection = new Selection( shape );
 
-		Point2D buttonCoords = selection.getButtonSpace( this.getSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
+		Point2D buttonCoords = selection.getButtonSpace( this.getPreferredSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
 		moveButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY(), BUTTON_SIZE, BUTTON_SIZE );
 		moveButton.setVisible( true );
 		resizeButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE + BUTTON_GAP_SIZE, BUTTON_SIZE, BUTTON_SIZE );
@@ -428,20 +433,20 @@ public class DrawPanel extends JPanel {
 
 		backupLineColor = new Color( lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue(), lineColor.getAlpha() );
 		backupFillColor = new Color( fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue(), fillColor.getAlpha() );
-		backupStroke = new BasicStroke( stroke.getLineWidth(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+		backupStroke = new BasicStroke( stroke.getLineWidth() );
 
 		lineColor = shape.getLineColor();
 		colorPanel.setLineColor( colorToString( lineColor ) );
 		fillColor = shape.getFillColor();
 		colorPanel.setFillColor( colorToString( fillColor ) );
-		stroke = new BasicStroke( shape.getStrokeWidth(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+		stroke = shape.getStroke();
 		toolPanel.setStrokeWidthSlider( (int)stroke.getLineWidth() );
 
 		repaint();
 	}
 
 	private void updateSelection() {
-		Point2D buttonCoords = selection.getButtonSpace( this.getSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
+		Point2D buttonCoords = selection.getButtonSpace( this.getPreferredSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
 
 		if ( buttonCoords != null ) {
 			moveButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY(), BUTTON_SIZE, BUTTON_SIZE );
@@ -497,11 +502,11 @@ public class DrawPanel extends JPanel {
 	}
 
 	public void setStrokeSize( float width ) {
-		stroke = new BasicStroke( width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+		stroke = new BasicStroke( width );
 
 		if ( selection != null ) {
 			Drawable shape = selection.getShape();
-			shape.setStrokeWidth( width );
+			shape.setStroke( stroke );
 
 			repaint();
 		}
