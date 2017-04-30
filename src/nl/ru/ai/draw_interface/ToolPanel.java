@@ -164,7 +164,7 @@ public class ToolPanel extends JPanel {
 		strokeWidthSlider.setMajorTickSpacing( 10 );
 		strokeWidthSlider.setPaintTicks( true );
 		strokeWidthSlider.setPaintLabels( true );
-		strokeWidthSlider.setBackground( BUTTONCOLOR_DEFAULT );
+		strokeWidthSlider.setBackground( this.getBackground() );
 		strokeWidthSlider.setToolTipText( TOOLTIPTEXT[9] );
 		strokeWidthSlider.addChangeListener( inputHandler );
 
