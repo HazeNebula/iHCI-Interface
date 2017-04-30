@@ -88,13 +88,13 @@ public class Triangle implements Drawable {
 	}
 	
 	@Override
-	public float getStrokeWidth() {
-		return stroke.getLineWidth();
+	public BasicStroke getStroke() {
+		return stroke;
 	}
 
 	@Override
-	public void setStrokeWidth( float strokeWidth ) {
-		this.stroke = new BasicStroke( strokeWidth );
+	public void setStroke( BasicStroke stroke ) {
+		this.stroke = stroke;
 	}
 
 	@Override

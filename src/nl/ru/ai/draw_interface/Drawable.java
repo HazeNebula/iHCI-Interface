@@ -1,20 +1,19 @@
 package nl.ru.ai.draw_interface;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-// TODO: change draw methods so that only the graphics object is changed if possible
-// TODO: change all stroke get / set function to accept BasicStroke objects, and let FreeShape make its own BasicStroke using the stroke width
 public interface Drawable {
 	public void draw( Graphics2D g );
 
 	public boolean contains( int x, int y );
 	
-	public float getStrokeWidth();
+	public BasicStroke getStroke();
 
-	public void setStrokeWidth( float strokeWidth );
+	public void setStroke( BasicStroke stroke );
 	
 	public Color getLineColor();
 

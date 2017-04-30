@@ -13,7 +13,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 
 public class ToolPanel extends JPanel {
-	private static final Color BACKGROUNDCOLOR = Color.LIGHT_GRAY;
 	private static final Color BUTTONCOLOR_DEFAULT = new Color( 0xFFE0E0E0, true );
 	private static final Color BUTTONCOLOR_SELECTED = new Color( 0xFFE0FFFF, true );
 	private static final int STROKEWIDTH_MIN = 0;
@@ -165,7 +164,7 @@ public class ToolPanel extends JPanel {
 		strokeWidthSlider.setMajorTickSpacing( 10 );
 		strokeWidthSlider.setPaintTicks( true );
 		strokeWidthSlider.setPaintLabels( true );
-		strokeWidthSlider.setBackground( BUTTONCOLOR_DEFAULT );
+		strokeWidthSlider.setBackground( this.getBackground() );
 		strokeWidthSlider.setToolTipText( TOOLTIPTEXT[9] );
 		strokeWidthSlider.addChangeListener( inputHandler );
 

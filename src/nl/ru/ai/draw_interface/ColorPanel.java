@@ -11,8 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class ColorPanel extends JPanel {
-	private static final Color BACKGROUNDCOLOR = Color.LIGHT_GRAY;
-
 	private static final String[] TOOLTIPTEXT = { "Leftclick to change color", "Rightclick to change color" };
 
 	private DrawPanel drawPanel;
@@ -61,8 +59,6 @@ public class ColorPanel extends JPanel {
 	};
 
 	public ColorPanel() {
-		setBackground( BACKGROUNDCOLOR );
-
 		changeLineColor = true;
 
 		blackButton = new JButton();
