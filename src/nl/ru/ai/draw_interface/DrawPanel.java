@@ -29,6 +29,8 @@ import nl.ru.ai.selforganisingmap.SelfOrganisingMap;
 
 public class DrawPanel extends JPanel {
 	private static final Color BACKGROUNDCOLOR = Color.WHITE;
+	
+	private static final int NUM_BUTTONS = 6;
 	private static final int BUTTON_SIZE = 60;
 	private static final int BUTTON_GAP_SIZE = 10;
 	private static final Color BUTTONCOLOR_DEFAULT = new Color( 0xFFE0E0E0, true );
@@ -420,7 +422,7 @@ public class DrawPanel extends JPanel {
 	}
 
 	private void createSelection( Drawable shape ) {
-		selection = new Selection( shape );
+		selection = new Selection( shape, NUM_BUTTONS );
 
 		Point2D buttonCoords = selection.getButtonSpace( this.getSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
 		if ( buttonCoords != null ) {

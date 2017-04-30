@@ -11,11 +11,13 @@ public class Selection {
 	private static final double GAP_SIZE = 10.0d;
 
 	private Drawable shape;
+	private int numButtons;
 	private double x1, y1, x2, y2;
 	private BasicStroke stroke;
 
-	public Selection( Drawable shape ) {
+	public Selection( Drawable shape, int numButtons ) {
 		this.shape = shape;
+		this.numButtons = numButtons;
 
 		Rectangle2D bounds = shape.getBounds();
 		double lineWidth = shape.getStroke().getLineWidth();
@@ -56,7 +58,7 @@ public class Selection {
 		}
 		buttonCoords.setLocation( Math.max( Math.min( buttonCoords.getX(), canvas.width - widthNeeded ), buttonGapSize ), 0.0d );
 
-		int heightNeeded = buttonSize * 4 + buttonGapSize * 4;
+		int heightNeeded = numButtons * ( buttonSize + buttonGapSize );
 		if ( heightNeeded < ( canvas.height - (int)y1 ) ) {
 			buttonCoords.setLocation( buttonCoords.getX(), y1 );
 		} else if ( heightNeeded < canvas.height ) {
