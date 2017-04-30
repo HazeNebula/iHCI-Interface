@@ -30,7 +30,7 @@ import nl.ru.ai.selforganisingmap.SelfOrganisingMap;
 public class DrawPanel extends JPanel {
 	private static final Color BACKGROUNDCOLOR = Color.WHITE;
 	
-	private static final int NUM_BUTTONS = 6;
+	private static final int NUM_BUTTONS = 4;
 	private static final int BUTTON_SIZE = 60;
 	private static final int BUTTON_GAP_SIZE = 10;
 	private static final Color BUTTONCOLOR_DEFAULT = new Color( 0xFFE0E0E0, true );
