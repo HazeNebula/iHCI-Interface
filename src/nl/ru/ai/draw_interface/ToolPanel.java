@@ -94,6 +94,7 @@ public class ToolPanel extends JPanel {
 				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
 				drawPanel.clearShapes();
 				drawPanel.setTool( Tool_t.NO_TOOL );
+				break;
 			}
 
 			drawPanel.setButtonSelection( null );

@@ -12,9 +12,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 public class Text implements Drawable {
-	//	public static final double HITBOX_SIZE = 20.0d;
-
-	private Shape rect;
+	private Shape rectangle;
 	private String text;
 	private double x1, y1, x2, y2, angle;
 	private Point2D translation;
@@ -45,7 +43,7 @@ public class Text implements Drawable {
 		t.rotate( angle );
 		t.scale( scale.getX(), scale.getY() );
 		t.translate( -getCenterX(), -getCenterY() );
-		rect = t.createTransformedShape( new Rectangle2D.Double( getMinX(), getMinY(), getWidth(), getHeight() ) );
+		rectangle = t.createTransformedShape( new Rectangle2D.Double( getMinX(), getMinY(), getWidth(), getHeight() ) );
 
 		Color oldColor = g.getColor();
 		
@@ -68,7 +66,12 @@ public class Text implements Drawable {
 
 	@Override
 	public boolean contains( int x, int y ) {
-		return rect.contains( x, y );
+		return rectangle.contains( x, y );
+	}
+	
+	@Override
+	public boolean intersects( Rectangle2D rect ) {
+		return rectangle.intersects( rect );
 	}
 
 	@Override
@@ -189,6 +192,6 @@ public class Text implements Drawable {
 
 	@Override
 	public Rectangle2D getBounds() {
-		return rect.getBounds2D();
+		return rectangle.getBounds2D();
 	}
 }

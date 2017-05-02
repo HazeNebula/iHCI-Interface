@@ -74,6 +74,17 @@ public class FreeShape implements Drawable {
 
 		return contains;
 	}
+	
+	@Override
+	public boolean intersects( Rectangle2D rect ) {
+		boolean intersects = false;
+		
+		for ( Line l : shape ) {
+			intersects |= l.intersects( rect );
+		}
+		
+		return intersects;
+	}
 
 	@Override
 	public BasicStroke getStroke() {

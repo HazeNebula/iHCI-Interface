@@ -10,7 +10,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class Image implements Drawable {
-	private Shape rect;
+	private Shape rectangle;
 	private BufferedImage image;
 	private double x1, y1, x2, y2, angle;
 	private Point2D translation;
@@ -33,7 +33,7 @@ public class Image implements Drawable {
 		t.rotate( angle );
 		t.scale( scale.getX(), scale.getY() );
 		t.translate( -getCenterX(), -getCenterY() );
-		rect = t.createTransformedShape( new Rectangle2D.Double( getMinX(), getMinY(), getWidth(), getHeight() ) );
+		rectangle = t.createTransformedShape( new Rectangle2D.Double( getMinX(), getMinY(), getWidth(), getHeight() ) );
 		t.translate( x1, y1 );
 
 		g.drawRenderedImage( image, t );
@@ -41,7 +41,12 @@ public class Image implements Drawable {
 
 	@Override
 	public boolean contains( int x, int y ) {
-		return rect.contains( x, y );
+		return rectangle.contains( x, y );
+	}
+	
+	@Override
+	public boolean intersects( Rectangle2D rect ) {
+		return rectangle.intersects( rect );
 	}
 	
 	@Override
@@ -162,6 +167,6 @@ public class Image implements Drawable {
 
 	@Override
 	public Rectangle2D getBounds() {
-		return rect.getBounds2D();
+		return rectangle.getBounds2D();
 	}
 }

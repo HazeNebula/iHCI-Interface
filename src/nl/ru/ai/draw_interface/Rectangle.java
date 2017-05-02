@@ -104,6 +104,11 @@ public class Rectangle implements Drawable {
 	}
 
 	@Override
+	public boolean intersects( Rectangle2D rect ) {
+		return rectangle.intersects( rect );
+	}
+
+	@Override
 	public double getAngle() {
 		return this.angle;
 	}

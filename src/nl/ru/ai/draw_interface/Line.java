@@ -59,6 +59,11 @@ public class Line implements Drawable {
 	public boolean contains( int x, int y ) {
 		return ( x >= getMinX() && x <= getMaxX() && y >= getMinY() && y <= getMaxY() && line.ptLineDist( (double)x, (double)y ) < HITBOX_SIZE );
 	}
+	
+	@Override
+	public boolean intersects( Rectangle2D rect ) {
+		return line.intersects( rect );
+	}
 
 	@Override
 	public Color getLineColor() {

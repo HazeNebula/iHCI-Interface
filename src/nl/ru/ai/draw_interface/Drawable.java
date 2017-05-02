@@ -11,6 +11,8 @@ public interface Drawable {
 
 	public boolean contains( int x, int y );
 	
+	public boolean intersects( Rectangle2D bounds );
+	
 	public BasicStroke getStroke();
 
 	public void setStroke( BasicStroke stroke );

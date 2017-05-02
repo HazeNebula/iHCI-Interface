@@ -66,6 +66,11 @@ public class Triangle implements Drawable {
 	public boolean contains( int x, int y ) {
 		return triangle.contains( x, y );
 	}
+	
+	@Override
+	public boolean intersects( Rectangle2D rect ) {
+		return triangle.intersects( rect );
+	}
 
 	@Override
 	public Color getLineColor() {

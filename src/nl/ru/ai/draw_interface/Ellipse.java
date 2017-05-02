@@ -74,6 +74,11 @@ public class Ellipse implements Drawable {
 	public boolean contains( int x, int y ) {
 		return ellipse.contains( x, y );
 	}
+	
+	@Override
+	public boolean intersects( Rectangle2D rect ) {
+		return ellipse.intersects( rect );
+	}
 
 	@Override
 	public Color getLineColor() {

@@ -29,8 +29,8 @@ import nl.ru.ai.selforganisingmap.SelfOrganisingMap;
 
 public class DrawPanel extends JPanel {
 	private static final Color BACKGROUNDCOLOR = Color.WHITE;
-	
-	private static final int NUM_BUTTONS = 4;
+
+	private static final int NUM_BUTTONS = 6;
 	private static final int BUTTON_SIZE = 60;
 	private static final int BUTTON_GAP_SIZE = 10;
 	private static final Color BUTTONCOLOR_DEFAULT = new Color( 0xFFE0E0E0, true );
@@ -41,7 +41,7 @@ public class DrawPanel extends JPanel {
 	private static final float STROKEWIDTH_INIT = 5.0f;
 	private static final float RECOGNIZE_STROKEWIDTH = 5.0f;
 
-	private static final String[] TOOLTIPTEXT = { "Move the selected object", "Resize the selected object", "Rotate the selected object", "Delete the selected object" };
+	private static final String[] TOOLTIPTEXT = { "Move", "Resize", "Rotate", "Move to foreground", "Move to background", "Delete" };
 
 	private ToolPanel toolPanel;
 	private ColorPanel colorPanel;
@@ -66,12 +66,19 @@ public class DrawPanel extends JPanel {
 	private JButton moveButton;
 	private JButton resizeButton;
 	private JButton rotateButton;
+	private JButton layerUpButton;
+	private JButton layerDownButton;
 	private JButton deleteButton;
 	private JButton currentButton;
 
 	private InputHandler inputHandler = new InputHandler() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
+			int shapeIndex = 0;
+			int intersectIndex = 0;
+			Drawable shape = null;
+			Rectangle2D bounds = null;
+			boolean shapeFound = false;
 			switch ( e.getActionCommand() ) {
 			case "Move":
 				setButtonSelection( Tool_t.MOVESELECTED_TOOL );
@@ -91,9 +98,57 @@ public class DrawPanel extends JPanel {
 
 				tool = Tool_t.ROTATESELECTED_TOOL;
 				break;
+			case "LayerUp":
+				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
+
+				shape = selection.getShape();
+				bounds = shape.getBounds();
+				for ( int i = 0; i < shapes.size(); ++i ) {
+					if ( shape == shapes.get( i ) ) {
+						shapeIndex = i;
+						break;
+					}
+				}
+				for ( int i = shapeIndex + 1; i < shapes.size(); ++i ) {
+					if ( shapes.get( i ).intersects( bounds ) ) {
+						intersectIndex = i;
+						shapeFound = true;
+						break;
+					}
+				}
+
+				if ( shapeFound ) {
+					shapes.add( intersectIndex, shapes.remove( shapeIndex ) );
+				}
+
+				break;
+			case "LayerDown":
+				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
+
+				shape = selection.getShape();
+				bounds = shape.getBounds();
+				for ( int i = shapes.size() - 1; i >= 0; --i ) {
+					if ( shape == shapes.get( i ) ) {
+						shapeIndex = i;
+						break;
+					}
+				}
+				for ( int i = shapeIndex - 1; i >= 0; --i ) {
+					if ( shapes.get( i ).intersects( bounds ) ) {
+						intersectIndex = i;
+						shapeFound = true;
+						break;
+					}
+				}
+
+				if ( shapeFound ) {
+					shapes.add( intersectIndex, shapes.remove( shapeIndex ) );
+				}
+
+				break;
 			case "Delete":
 				tool = Tool_t.SELECTION_TOOL;
-				Drawable shape = selection.getShape();
+				shape = selection.getShape();
 
 				if ( shape != null ) {
 					for ( int i = 0; i < shapes.size(); ++i ) {
@@ -113,6 +168,8 @@ public class DrawPanel extends JPanel {
 			default:
 				break;
 			}
+
+			repaint();
 		}
 
 		@Override
@@ -400,9 +457,25 @@ public class DrawPanel extends JPanel {
 		add( rotateButton );
 		rotateButton.setVisible( false );
 
+		layerUpButton = new JButton( new ImageIcon( "images\\icons\\layerUpIcon.png" ) );
+		layerUpButton.setBackground( BUTTONCOLOR_DEFAULT );
+		layerUpButton.setToolTipText( TOOLTIPTEXT[3] );
+		layerUpButton.setActionCommand( "LayerUp" );
+		layerUpButton.addActionListener( inputHandler );
+		add( layerUpButton );
+		layerUpButton.setVisible( false );
+
+		layerDownButton = new JButton( new ImageIcon( "images\\icons\\layerDownIcon.png" ) );
+		layerDownButton.setBackground( BUTTONCOLOR_DEFAULT );
+		layerDownButton.setToolTipText( TOOLTIPTEXT[4] );
+		layerDownButton.setActionCommand( "LayerDown" );
+		layerDownButton.addActionListener( inputHandler );
+		add( layerDownButton );
+		layerDownButton.setVisible( false );
+
 		deleteButton = new JButton( new ImageIcon( "images\\icons\\DeleteIcon.png" ) );
 		deleteButton.setBackground( BUTTONCOLOR_DEFAULT );
-		deleteButton.setToolTipText( TOOLTIPTEXT[3] );
+		deleteButton.setToolTipText( TOOLTIPTEXT[5] );
 		deleteButton.setActionCommand( "Delete" );
 		deleteButton.addActionListener( inputHandler );
 		add( deleteButton );
@@ -426,17 +499,24 @@ public class DrawPanel extends JPanel {
 	private void createSelection( Drawable shape ) {
 		selection = new Selection( shape, NUM_BUTTONS );
 
-		Point2D buttonCoords = selection.getButtonSpace( this.getSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
-		if ( buttonCoords != null ) {
-			moveButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY(), BUTTON_SIZE, BUTTON_SIZE );
-			moveButton.setVisible( true );
-			resizeButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE + BUTTON_GAP_SIZE, BUTTON_SIZE, BUTTON_SIZE );
-			resizeButton.setVisible( true );
-			rotateButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 2 + BUTTON_GAP_SIZE * 2, BUTTON_SIZE, BUTTON_SIZE );
-			rotateButton.setVisible( true );
-			deleteButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 3 + BUTTON_GAP_SIZE * 3, BUTTON_SIZE, BUTTON_SIZE );
-			deleteButton.setVisible( true );
-		}
+		updateSelection();
+		moveButton.setVisible( true );
+		resizeButton.setVisible( true );
+		rotateButton.setVisible( true );
+		layerUpButton.setVisible( true );
+		layerDownButton.setVisible( true );
+		deleteButton.setVisible( true );
+		//		Point2D buttonCoords = selection.getButtonSpace( this.getSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
+		//		if ( buttonCoords != null ) {
+		//			moveButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY(), BUTTON_SIZE, BUTTON_SIZE );
+		//			moveButton.setVisible( true );
+		//			resizeButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE + BUTTON_GAP_SIZE, BUTTON_SIZE, BUTTON_SIZE );
+		//			resizeButton.setVisible( true );
+		//			rotateButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 2 + BUTTON_GAP_SIZE * 2, BUTTON_SIZE, BUTTON_SIZE );
+		//			rotateButton.setVisible( true );
+		//			deleteButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 3 + BUTTON_GAP_SIZE * 3, BUTTON_SIZE, BUTTON_SIZE );
+		//			deleteButton.setVisible( true );
+		//		}
 
 		backupLineColor = new Color( lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue(), lineColor.getAlpha() );
 		backupFillColor = new Color( fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue(), fillColor.getAlpha() );
@@ -459,7 +539,9 @@ public class DrawPanel extends JPanel {
 			moveButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY(), BUTTON_SIZE, BUTTON_SIZE );
 			resizeButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE + BUTTON_GAP_SIZE, BUTTON_SIZE, BUTTON_SIZE );
 			rotateButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 2 + BUTTON_GAP_SIZE * 2, BUTTON_SIZE, BUTTON_SIZE );
-			deleteButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 3 + BUTTON_GAP_SIZE * 3, BUTTON_SIZE, BUTTON_SIZE );
+			layerUpButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 3 + BUTTON_GAP_SIZE * 3, BUTTON_SIZE, BUTTON_SIZE );
+			layerDownButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 4 + BUTTON_GAP_SIZE * 4, BUTTON_SIZE, BUTTON_SIZE );
+			deleteButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 5 + BUTTON_GAP_SIZE * 5, BUTTON_SIZE, BUTTON_SIZE );
 		}
 	}
 
@@ -469,6 +551,8 @@ public class DrawPanel extends JPanel {
 		moveButton.setVisible( false );
 		resizeButton.setVisible( false );
 		rotateButton.setVisible( false );
+		layerUpButton.setVisible( false );
+		layerDownButton.setVisible( false );
 		deleteButton.setVisible( false );
 
 		lineColor = backupLineColor;
@@ -574,8 +658,12 @@ public class DrawPanel extends JPanel {
 			repaint();
 		}
 	}
-	
+
 	public void clearShapes() {
+		if ( selection != null ) {
+			removeSelection();
+		}
+
 		shapes.clear();
 		repaint();
 	}
