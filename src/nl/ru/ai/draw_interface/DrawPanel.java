@@ -199,6 +199,8 @@ public class DrawPanel extends JPanel {
 						case ELLIPSE:
 							shapes.add( new Ellipse( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke ) );
 							break;
+						default:
+							break;
 						}
 					}
 
@@ -571,6 +573,11 @@ public class DrawPanel extends JPanel {
 
 			repaint();
 		}
+	}
+	
+	public void clearShapes() {
+		shapes.clear();
+		repaint();
 	}
 
 	@Override

@@ -29,6 +29,7 @@ public class ToolPanel extends JPanel {
 			"Draw an ellipse",
 			"Recognizable drawing",
 			"Freehand drawing",
+			"Clear all",
 			"Change line width"
 		};
 
@@ -41,6 +42,7 @@ public class ToolPanel extends JPanel {
 	private JButton ellipseButton;
 	private JButton recognizeButton;
 	private JButton freedrawButton;
+	private JButton clearAllButton;
 	private JLabel strokeWidthLabel;
 	private JSlider strokeWidthSlider;
 
@@ -88,6 +90,10 @@ public class ToolPanel extends JPanel {
 				setButtonSelection( Tool_t.FREEDRAW_TOOL );
 				drawPanel.setTool( Tool_t.FREEDRAW_TOOL );
 				break;
+			case "ClearAll":
+				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
+				drawPanel.clearShapes();
+				drawPanel.setTool( Tool_t.NO_TOOL );
 			}
 
 			drawPanel.setButtonSelection( null );
@@ -155,9 +161,15 @@ public class ToolPanel extends JPanel {
 		freedrawButton.setToolTipText( TOOLTIPTEXT[8] );
 		freedrawButton.setActionCommand( "FreeDraw" );
 		freedrawButton.addActionListener( inputHandler );
+		
+		clearAllButton = new JButton( new ImageIcon( "images\\icons\\clearAllIcon.png" ) );
+		clearAllButton.setBackground( BUTTONCOLOR_DEFAULT );
+		clearAllButton.setToolTipText( TOOLTIPTEXT[9] );
+		clearAllButton.setActionCommand( "ClearAll" );
+		clearAllButton.addActionListener( inputHandler );
 
 		strokeWidthLabel = new JLabel( "Line Width:" );
-		selectButton.setToolTipText( TOOLTIPTEXT[9] );
+		selectButton.setToolTipText( TOOLTIPTEXT[10] );
 
 		// TODO: get custom slider ui in order to change colors and make ticks stand out against background
 		strokeWidthSlider = new JSlider( SwingConstants.VERTICAL, STROKEWIDTH_MIN, STROKEWIDTH_MAX, STROKEWIDTH_INIT );
@@ -165,15 +177,15 @@ public class ToolPanel extends JPanel {
 		strokeWidthSlider.setPaintTicks( true );
 		strokeWidthSlider.setPaintLabels( true );
 		strokeWidthSlider.setBackground( this.getBackground() );
-		strokeWidthSlider.setToolTipText( TOOLTIPTEXT[9] );
+		strokeWidthSlider.setToolTipText( TOOLTIPTEXT[10] );
 		strokeWidthSlider.addChangeListener( inputHandler );
 
 		GroupLayout layout = new GroupLayout( this );
 		setLayout( layout );
 		layout.setAutoCreateGaps( true );
 		layout.setAutoCreateContainerGaps( true );
-		layout.setHorizontalGroup( layout.createSequentialGroup().addGroup( layout.createParallelGroup( GroupLayout.Alignment.CENTER ).addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( recognizeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( freedrawButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthLabel ).addComponent( strokeWidthSlider ) ) );
-		layout.setVerticalGroup( layout.createSequentialGroup().addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( recognizeButton ).addComponent( freedrawButton ).addComponent( strokeWidthLabel ).addComponent( strokeWidthSlider ) );
+		layout.setHorizontalGroup( layout.createSequentialGroup().addGroup( layout.createParallelGroup( GroupLayout.Alignment.CENTER ).addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( recognizeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( freedrawButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( clearAllButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthSlider, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
+		layout.setVerticalGroup( layout.createSequentialGroup().addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( recognizeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( freedrawButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( clearAllButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent( strokeWidthLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthSlider, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) );
 
 		currentButton = recognizeButton;
 		currentButton.setBackground( BUTTONCOLOR_SELECTED );
