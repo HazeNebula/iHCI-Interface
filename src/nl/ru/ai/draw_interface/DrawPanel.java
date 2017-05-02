@@ -220,9 +220,28 @@ public class DrawPanel extends JPanel {
 
 				break;
 			case TEXT_TOOL:
-				String text = (String)JOptionPane.showInputDialog( (DrawPanel)e.getSource(), "Enter text:", "Text", JOptionPane.PLAIN_MESSAGE, null, null, "Text" );
-				if ( text != null ) {
-					shapes.add( new Text( mouseCoords.getX(), mouseCoords.getY(), text, lineColor ) );
+				int changeTextIndex = -1;
+				for ( int i = 0; i < shapes.size(); ++i ) {
+					String className = shapes.get( i ).getClass().getName();
+					boolean contains = shapes.get( i ).contains( mouseCoords.x, mouseCoords.y );
+
+					if ( className.equals( "nl.ru.ai.draw_interface.Text" ) && contains ) {
+						changeTextIndex = i;
+						break;
+					}
+				}
+
+				if ( changeTextIndex == -1 ) {
+					String text = (String)JOptionPane.showInputDialog( (DrawPanel)e.getSource(), "Enter text:", "Text", JOptionPane.PLAIN_MESSAGE, null, null, "Text" );
+					if ( text != null ) {
+						shapes.add( new Text( mouseCoords.getX(), mouseCoords.getY(), text, lineColor ) );
+					}
+				} else {
+					String newText = (String)JOptionPane.showInputDialog( (DrawPanel)e.getSource(), "Change text:", "Text", JOptionPane.PLAIN_MESSAGE, null, null, "Text" );
+					if ( newText != null ) {
+						Text textObject = (Text)shapes.get( changeTextIndex );
+						textObject.setText( newText );
+					}
 				}
 
 				break;

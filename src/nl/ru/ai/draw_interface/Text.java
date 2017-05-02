@@ -73,6 +73,10 @@ public class Text implements Drawable {
 	public boolean intersects( Rectangle2D rect ) {
 		return rectangle.intersects( rect );
 	}
+	
+	public void setText( String text ) {
+		this.text = text;
+	}
 
 	@Override
 	public BasicStroke getStroke() {
