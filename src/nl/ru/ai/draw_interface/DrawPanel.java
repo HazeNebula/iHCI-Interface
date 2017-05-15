@@ -525,17 +525,6 @@ public class DrawPanel extends JPanel {
 		layerUpButton.setVisible( true );
 		layerDownButton.setVisible( true );
 		deleteButton.setVisible( true );
-		//		Point2D buttonCoords = selection.getButtonSpace( this.getSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
-		//		if ( buttonCoords != null ) {
-		//			moveButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY(), BUTTON_SIZE, BUTTON_SIZE );
-		//			moveButton.setVisible( true );
-		//			resizeButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE + BUTTON_GAP_SIZE, BUTTON_SIZE, BUTTON_SIZE );
-		//			resizeButton.setVisible( true );
-		//			rotateButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 2 + BUTTON_GAP_SIZE * 2, BUTTON_SIZE, BUTTON_SIZE );
-		//			rotateButton.setVisible( true );
-		//			deleteButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 3 + BUTTON_GAP_SIZE * 3, BUTTON_SIZE, BUTTON_SIZE );
-		//			deleteButton.setVisible( true );
-		//		}
 
 		backupLineColor = new Color( lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue(), lineColor.getAlpha() );
 		backupFillColor = new Color( fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue(), fillColor.getAlpha() );
