@@ -55,45 +55,45 @@ public class ToolPanel extends JPanel {
 		public void actionPerformed( ActionEvent e ) {
 			switch ( e.getActionCommand() ) {
 			case "Select":
-				setButtonSelection( Tool_t.SELECTION_TOOL );
-				drawPanel.setTool( Tool_t.SELECTION_TOOL );
+				setButtonSelection( Tool_t.SELECTION );
+				drawPanel.setTool( Tool_t.SELECTION );
 				break;
 			case "Image":
-				setButtonSelection( Tool_t.IMAGE_TOOL );
-				drawPanel.setTool( Tool_t.IMAGE_TOOL );
+				setButtonSelection( Tool_t.IMAGE );
+				drawPanel.setTool( Tool_t.IMAGE );
 				break;
 			case "Text":
-				setButtonSelection( Tool_t.TEXT_TOOL );
-				drawPanel.setTool( Tool_t.TEXT_TOOL );
+				setButtonSelection( Tool_t.TEXT );
+				drawPanel.setTool( Tool_t.TEXT );
 				break;
 			case "Line":
-				setButtonSelection( Tool_t.LINE_TOOL );
-				drawPanel.setTool( Tool_t.LINE_TOOL );
+				setButtonSelection( Tool_t.LINE );
+				drawPanel.setTool( Tool_t.LINE );
 				break;
 			case "Triangle":
-				setButtonSelection( Tool_t.TRIANGLE_TOOL );
-				drawPanel.setTool( Tool_t.TRIANGLE_TOOL );
+				setButtonSelection( Tool_t.TRIANGLE );
+				drawPanel.setTool( Tool_t.TRIANGLE );
 				break;
 			case "Rectangle":
-				setButtonSelection( Tool_t.RECTANGLE_TOOL );
-				drawPanel.setTool( Tool_t.RECTANGLE_TOOL );
+				setButtonSelection( Tool_t.RECTANGLE );
+				drawPanel.setTool( Tool_t.RECTANGLE );
 				break;
 			case "Ellipse":
-				setButtonSelection( Tool_t.ELLIPSE_TOOL );
-				drawPanel.setTool( Tool_t.ELLIPSE_TOOL );
+				setButtonSelection( Tool_t.ELLIPSE );
+				drawPanel.setTool( Tool_t.ELLIPSE );
 				break;
 			case "Recognize":
-				setButtonSelection( Tool_t.RECOGNIZE_TOOL );
-				drawPanel.setTool( Tool_t.RECOGNIZE_TOOL );
+				setButtonSelection( Tool_t.RECOGNIZE );
+				drawPanel.setTool( Tool_t.RECOGNIZE );
 				break;
 			case "FreeDraw":
-				setButtonSelection( Tool_t.FREEDRAW_TOOL );
-				drawPanel.setTool( Tool_t.FREEDRAW_TOOL );
+				setButtonSelection( Tool_t.FREEDRAW );
+				drawPanel.setTool( Tool_t.FREEDRAW );
 				break;
 			case "ClearAll":
 				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
 				drawPanel.clearShapes();
-				drawPanel.setTool( Tool_t.NO_TOOL );
+				drawPanel.setTool( Tool_t.NONE );
 				break;
 			}
 
@@ -203,31 +203,31 @@ public class ToolPanel extends JPanel {
 			JButton button = null;
 
 			switch ( tool ) {
-			case SELECTION_TOOL:
+			case SELECTION:
 				button = selectButton;
 				break;
-			case IMAGE_TOOL:
+			case IMAGE:
 				button = imageButton;
 				break;
-			case TEXT_TOOL:
+			case TEXT:
 				button = textButton;
 				break;
-			case LINE_TOOL:
+			case LINE:
 				button = lineButton;
 				break;
-			case TRIANGLE_TOOL:
+			case TRIANGLE:
 				button = triangleButton;
 				break;
-			case RECTANGLE_TOOL:
+			case RECTANGLE:
 				button = rectangleButton;
 				break;
-			case ELLIPSE_TOOL:
+			case ELLIPSE:
 				button = ellipseButton;
 				break;
-			case RECOGNIZE_TOOL:
+			case RECOGNIZE:
 				button = recognizeButton;
 				break;
-			case FREEDRAW_TOOL:
+			case FREEDRAW:
 				button = freedrawButton;
 				break;
 			default:

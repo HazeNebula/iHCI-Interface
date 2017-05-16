@@ -81,22 +81,22 @@ public class DrawPanel extends JPanel {
 			boolean shapeFound = false;
 			switch ( e.getActionCommand() ) {
 			case "Move":
-				setButtonSelection( Tool_t.MOVESELECTED_TOOL );
+				setButtonSelection( Tool_t.MOVESELECTED );
 				toolPanel.setButtonSelection( null );
 
-				tool = Tool_t.MOVESELECTED_TOOL;
+				tool = Tool_t.MOVESELECTED;
 				break;
 			case "Resize":
-				setButtonSelection( Tool_t.RESIZESELECTED_TOOL );
+				setButtonSelection( Tool_t.RESIZESELECTED );
 				toolPanel.setButtonSelection( null );
 
-				tool = Tool_t.RESIZESELECTED_TOOL;
+				tool = Tool_t.RESIZESELECTED;
 				break;
 			case "Rotate":
-				setButtonSelection( Tool_t.ROTATESELECTED_TOOL );
+				setButtonSelection( Tool_t.ROTATESELECTED );
 				toolPanel.setButtonSelection( null );
 
-				tool = Tool_t.ROTATESELECTED_TOOL;
+				tool = Tool_t.ROTATESELECTED;
 				break;
 			case "LayerUp":
 				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
@@ -109,6 +109,7 @@ public class DrawPanel extends JPanel {
 						break;
 					}
 				}
+				
 				for ( int i = shapeIndex + 1; i < shapes.size(); ++i ) {
 					if ( shapes.get( i ).intersects( bounds ) ) {
 						intersectIndex = i;
@@ -133,6 +134,7 @@ public class DrawPanel extends JPanel {
 						break;
 					}
 				}
+				
 				for ( int i = shapeIndex - 1; i >= 0; --i ) {
 					if ( shapes.get( i ).intersects( bounds ) ) {
 						intersectIndex = i;
@@ -147,7 +149,7 @@ public class DrawPanel extends JPanel {
 
 				break;
 			case "Delete":
-				tool = Tool_t.SELECTION_TOOL;
+				tool = Tool_t.SELECTION;
 				shape = selection.getShape();
 
 				if ( shape != null ) {
@@ -157,8 +159,8 @@ public class DrawPanel extends JPanel {
 							removeSelection();
 
 							setButtonSelection( null );
-							toolPanel.setButtonSelection( Tool_t.SELECTION_TOOL );
-							tool = Tool_t.SELECTION_TOOL;
+							toolPanel.setButtonSelection( Tool_t.SELECTION );
+							tool = Tool_t.SELECTION;
 							break;
 						}
 					}
@@ -176,12 +178,12 @@ public class DrawPanel extends JPanel {
 		public void mousePressed( MouseEvent e ) {
 			Point mouseCoords = new Point( e.getX(), e.getY() );
 
-			if ( tool != Tool_t.SELECTION_TOOL && tool != Tool_t.MOVESELECTED_TOOL && tool != Tool_t.RESIZESELECTED_TOOL && tool != Tool_t.ROTATESELECTED_TOOL && selection != null ) {
+			if ( tool != Tool_t.SELECTION && tool != Tool_t.MOVESELECTED && tool != Tool_t.RESIZESELECTED && tool != Tool_t.ROTATESELECTED && selection != null ) {
 				removeSelection();
 			}
 
 			switch ( tool ) {
-			case SELECTION_TOOL:
+			case SELECTION:
 				int contained = -1;
 
 				for ( int i = shapes.size() - 1; i >= 0; --i ) {
@@ -198,7 +200,7 @@ public class DrawPanel extends JPanel {
 				}
 
 				break;
-			case IMAGE_TOOL:
+			case IMAGE:
 				JFileChooser fc = new JFileChooser( Paths.get( "." ).toAbsolutePath().normalize().toString() );
 				FileNameExtensionFilter filter = new FileNameExtensionFilter( "Image files", "png", "bmp", "jpg", "jpeg" );
 				fc.setFileFilter( filter );
@@ -219,7 +221,7 @@ public class DrawPanel extends JPanel {
 				}
 
 				break;
-			case TEXT_TOOL:
+			case TEXT:
 				int changeTextIndex = -1;
 				for ( int i = 0; i < shapes.size(); ++i ) {
 					String className = shapes.get( i ).getClass().getName();
@@ -255,7 +257,7 @@ public class DrawPanel extends JPanel {
 		@Override
 		public void mouseReleased( MouseEvent e ) {
 			switch ( tool ) {
-			case RECOGNIZE_TOOL:
+			case RECOGNIZE:
 				if ( dragging && shapeSet ) {
 					if ( recognizeShape.isStraightLine() ) {
 						Point2D[] coords = recognizeShape.getEndPoints();
@@ -297,7 +299,7 @@ public class DrawPanel extends JPanel {
 			Point2D mouseCoords = new Point2D.Double( e.getX(), e.getY() );
 
 			switch ( tool ) {
-			case LINE_TOOL:
+			case LINE:
 				if ( dragging ) {
 					shapes.remove( shapes.size() - 1 );
 				} else {
@@ -308,7 +310,7 @@ public class DrawPanel extends JPanel {
 				shapes.add( new Line( lastCoords.getX(), lastCoords.getY(), mouseCoords.getX(), mouseCoords.getY(), lineColor, fillColor, stroke ) );
 
 				break;
-			case TRIANGLE_TOOL:
+			case TRIANGLE:
 				if ( dragging ) {
 					shapes.remove( shapes.size() - 1 );
 				} else {
@@ -319,7 +321,7 @@ public class DrawPanel extends JPanel {
 				shapes.add( new Triangle( lastCoords.getX(), lastCoords.getY(), mouseCoords.getX(), mouseCoords.getY(), lineColor, fillColor, stroke ) );
 
 				break;
-			case RECTANGLE_TOOL:
+			case RECTANGLE:
 				if ( dragging ) {
 					shapes.remove( shapes.size() - 1 );
 				} else {
@@ -330,7 +332,7 @@ public class DrawPanel extends JPanel {
 				shapes.add( new Rectangle( lastCoords.getX(), lastCoords.getY(), mouseCoords.getX(), mouseCoords.getY(), lineColor, fillColor, stroke ) );
 
 				break;
-			case ELLIPSE_TOOL:
+			case ELLIPSE:
 				if ( dragging ) {
 					shapes.remove( shapes.size() - 1 );
 				} else {
@@ -341,7 +343,7 @@ public class DrawPanel extends JPanel {
 				shapes.add( new Ellipse( lastCoords.getX(), lastCoords.getY(), mouseCoords.getX(), mouseCoords.getY(), lineColor, fillColor, stroke ) );
 
 				break;
-			case RECOGNIZE_TOOL:
+			case RECOGNIZE:
 				if ( dragging ) {
 					recognizeShape.add( lastCoords.getX(), lastCoords.getY(), mouseCoords.getX(), mouseCoords.getY() );
 					shapeSet = true;
@@ -351,7 +353,7 @@ public class DrawPanel extends JPanel {
 				dragging = true;
 
 				break;
-			case FREEDRAW_TOOL:
+			case FREEDRAW:
 				if ( dragging ) {
 					FreeShape freeShape = (FreeShape)shapes.get( shapes.size() - 1 );
 					freeShape.add( lastCoords.getX(), lastCoords.getY(), mouseCoords.getX(), mouseCoords.getY() );
@@ -363,7 +365,7 @@ public class DrawPanel extends JPanel {
 				dragging = true;
 
 				break;
-			case MOVESELECTED_TOOL:
+			case MOVESELECTED:
 				if ( dragging && selection != null ) {
 					Drawable shape = selection.getShape();
 
@@ -378,7 +380,7 @@ public class DrawPanel extends JPanel {
 				dragging = true;
 
 				break;
-			case RESIZESELECTED_TOOL:
+			case RESIZESELECTED:
 				if ( dragging && selection != null ) {
 					Drawable shape = selection.getShape();
 
@@ -395,7 +397,7 @@ public class DrawPanel extends JPanel {
 				dragging = true;
 
 				break;
-			case ROTATESELECTED_TOOL:
+			case ROTATESELECTED:
 				if ( dragging && selection != null ) {
 					Drawable shape = selection.getShape();
 
@@ -432,7 +434,7 @@ public class DrawPanel extends JPanel {
 
 		shapes = new ArrayList<Drawable>();
 		recognizeShape = new FreeShape( Color.BLACK, new Color( 0x00FFFFFF, true ), new BasicStroke( RECOGNIZE_STROKEWIDTH ) );
-		tool = Tool_t.RECOGNIZE_TOOL;
+		tool = Tool_t.RECOGNIZE;
 		map = new SelfOrganisingMap( "map\\vectors.txt" );
 		lastCoords = new Point( 0, 0 );
 
@@ -580,13 +582,13 @@ public class DrawPanel extends JPanel {
 			JButton button = null;
 
 			switch ( tool ) {
-			case MOVESELECTED_TOOL:
+			case MOVESELECTED:
 				button = moveButton;
 				break;
-			case RESIZESELECTED_TOOL:
+			case RESIZESELECTED:
 				button = resizeButton;
 				break;
-			case ROTATESELECTED_TOOL:
+			case ROTATESELECTED:
 				button = rotateButton;
 				break;
 			default:
