@@ -29,8 +29,8 @@ public class ToolPanel extends JPanel {
 			"Draw an ellipse",
 			"Recognizable drawing",
 			"Freehand drawing",
-			"Clear all",
 			"Undo last action (Ctrl + Z)",
+			"Clear all",
 			"Change line width"
 		};
 
@@ -182,14 +182,14 @@ public class ToolPanel extends JPanel {
 		clearAllButton.addActionListener( inputHandler );
 
 		strokeWidthLabel = new JLabel( "Line Width:" );
-		selectButton.setToolTipText( TOOLTIPTEXT[10] );
+		selectButton.setToolTipText( TOOLTIPTEXT[11] );
 
 		strokeWidthSlider = new JSlider( SwingConstants.VERTICAL, STROKEWIDTH_MIN, STROKEWIDTH_MAX, STROKEWIDTH_INIT );
 		strokeWidthSlider.setMajorTickSpacing( 10 );
 		strokeWidthSlider.setPaintTicks( true );
 		strokeWidthSlider.setPaintLabels( true );
 		strokeWidthSlider.setBackground( this.getBackground() );
-		strokeWidthSlider.setToolTipText( TOOLTIPTEXT[10] );
+		strokeWidthSlider.setToolTipText( TOOLTIPTEXT[11] );
 		strokeWidthSlider.addChangeListener( inputHandler );
 
 		GroupLayout layout = new GroupLayout( this );
