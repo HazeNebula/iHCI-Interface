@@ -29,6 +29,7 @@ public class ToolPanel extends JPanel {
 			"Draw an ellipse",
 			"Recognizable drawing",
 			"Freehand drawing",
+			"Undo last action (Ctrl + Z)",
 			"Clear all",
 			"Change line width"
 		};
@@ -43,6 +44,7 @@ public class ToolPanel extends JPanel {
 	private JButton recognizeButton;
 	private JButton freedrawButton;
 	private JButton clearAllButton;
+	private JButton undoButton;
 	private JLabel strokeWidthLabel;
 	private JSlider strokeWidthSlider;
 
@@ -55,46 +57,50 @@ public class ToolPanel extends JPanel {
 		public void actionPerformed( ActionEvent e ) {
 			switch ( e.getActionCommand() ) {
 			case "Select":
-				setButtonSelection( Tool_t.SELECTION_TOOL );
-				drawPanel.setTool( Tool_t.SELECTION_TOOL );
+				setButtonSelection( Tool_t.SELECTION );
+				drawPanel.setTool( Tool_t.SELECTION );
 				break;
 			case "Image":
-				setButtonSelection( Tool_t.IMAGE_TOOL );
-				drawPanel.setTool( Tool_t.IMAGE_TOOL );
+				setButtonSelection( Tool_t.IMAGE );
+				drawPanel.setTool( Tool_t.IMAGE );
 				break;
 			case "Text":
-				setButtonSelection( Tool_t.TEXT_TOOL );
-				drawPanel.setTool( Tool_t.TEXT_TOOL );
+				setButtonSelection( Tool_t.TEXT );
+				drawPanel.setTool( Tool_t.TEXT );
 				break;
 			case "Line":
-				setButtonSelection( Tool_t.LINE_TOOL );
-				drawPanel.setTool( Tool_t.LINE_TOOL );
+				setButtonSelection( Tool_t.LINE );
+				drawPanel.setTool( Tool_t.LINE );
 				break;
 			case "Triangle":
-				setButtonSelection( Tool_t.TRIANGLE_TOOL );
-				drawPanel.setTool( Tool_t.TRIANGLE_TOOL );
+				setButtonSelection( Tool_t.TRIANGLE );
+				drawPanel.setTool( Tool_t.TRIANGLE );
 				break;
 			case "Rectangle":
-				setButtonSelection( Tool_t.RECTANGLE_TOOL );
-				drawPanel.setTool( Tool_t.RECTANGLE_TOOL );
+				setButtonSelection( Tool_t.RECTANGLE );
+				drawPanel.setTool( Tool_t.RECTANGLE );
 				break;
 			case "Ellipse":
-				setButtonSelection( Tool_t.ELLIPSE_TOOL );
-				drawPanel.setTool( Tool_t.ELLIPSE_TOOL );
+				setButtonSelection( Tool_t.ELLIPSE );
+				drawPanel.setTool( Tool_t.ELLIPSE );
 				break;
 			case "Recognize":
-				setButtonSelection( Tool_t.RECOGNIZE_TOOL );
-				drawPanel.setTool( Tool_t.RECOGNIZE_TOOL );
+				setButtonSelection( Tool_t.RECOGNIZE );
+				drawPanel.setTool( Tool_t.RECOGNIZE );
 				break;
 			case "FreeDraw":
-				setButtonSelection( Tool_t.FREEDRAW_TOOL );
-				drawPanel.setTool( Tool_t.FREEDRAW_TOOL );
+				setButtonSelection( Tool_t.FREEDRAW );
+				drawPanel.setTool( Tool_t.FREEDRAW );
 				break;
 			case "ClearAll":
 				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
 				drawPanel.clearShapes();
-				drawPanel.setTool( Tool_t.NO_TOOL );
+				drawPanel.setTool( Tool_t.NONE );
 				break;
+			case "Undo":
+				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
+				drawPanel.undoLastAction();
+				drawPanel.setTool( Tool_t.NONE );
 			}
 
 			drawPanel.setButtonSelection( null );
@@ -163,30 +169,35 @@ public class ToolPanel extends JPanel {
 		freedrawButton.setActionCommand( "FreeDraw" );
 		freedrawButton.addActionListener( inputHandler );
 		
+		undoButton = new JButton( new ImageIcon( "images\\icons\\undoIcon.png" ) );
+		undoButton.setBackground( BUTTONCOLOR_DEFAULT );
+		undoButton.setToolTipText( TOOLTIPTEXT[9] );
+		undoButton.setActionCommand( "Undo" );
+		undoButton.addActionListener( inputHandler );
+		
 		clearAllButton = new JButton( new ImageIcon( "images\\icons\\clearAllIcon.png" ) );
 		clearAllButton.setBackground( BUTTONCOLOR_DEFAULT );
-		clearAllButton.setToolTipText( TOOLTIPTEXT[9] );
+		clearAllButton.setToolTipText( TOOLTIPTEXT[10] );
 		clearAllButton.setActionCommand( "ClearAll" );
 		clearAllButton.addActionListener( inputHandler );
 
 		strokeWidthLabel = new JLabel( "Line Width:" );
-		selectButton.setToolTipText( TOOLTIPTEXT[10] );
+		selectButton.setToolTipText( TOOLTIPTEXT[11] );
 
-		// TODO: get custom slider ui in order to change colors and make ticks stand out against background
 		strokeWidthSlider = new JSlider( SwingConstants.VERTICAL, STROKEWIDTH_MIN, STROKEWIDTH_MAX, STROKEWIDTH_INIT );
 		strokeWidthSlider.setMajorTickSpacing( 10 );
 		strokeWidthSlider.setPaintTicks( true );
 		strokeWidthSlider.setPaintLabels( true );
 		strokeWidthSlider.setBackground( this.getBackground() );
-		strokeWidthSlider.setToolTipText( TOOLTIPTEXT[10] );
+		strokeWidthSlider.setToolTipText( TOOLTIPTEXT[11] );
 		strokeWidthSlider.addChangeListener( inputHandler );
 
 		GroupLayout layout = new GroupLayout( this );
 		setLayout( layout );
 		layout.setAutoCreateGaps( true );
 		layout.setAutoCreateContainerGaps( true );
-		layout.setHorizontalGroup( layout.createSequentialGroup().addGroup( layout.createParallelGroup( GroupLayout.Alignment.CENTER ).addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( recognizeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( freedrawButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( clearAllButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthSlider, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
-		layout.setVerticalGroup( layout.createSequentialGroup().addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( recognizeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( freedrawButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( clearAllButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent( strokeWidthLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthSlider, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) );
+		layout.setHorizontalGroup( layout.createSequentialGroup().addGroup( layout.createParallelGroup( GroupLayout.Alignment.CENTER ).addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( recognizeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( freedrawButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( undoButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( clearAllButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthSlider, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
+		layout.setVerticalGroup( layout.createSequentialGroup().addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( recognizeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( freedrawButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( undoButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( clearAllButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent( strokeWidthLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthSlider, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) );
 
 		currentButton = recognizeButton;
 		currentButton.setBackground( BUTTONCOLOR_SELECTED );
@@ -203,31 +214,31 @@ public class ToolPanel extends JPanel {
 			JButton button = null;
 
 			switch ( tool ) {
-			case SELECTION_TOOL:
+			case SELECTION:
 				button = selectButton;
 				break;
-			case IMAGE_TOOL:
+			case IMAGE:
 				button = imageButton;
 				break;
-			case TEXT_TOOL:
+			case TEXT:
 				button = textButton;
 				break;
-			case LINE_TOOL:
+			case LINE:
 				button = lineButton;
 				break;
-			case TRIANGLE_TOOL:
+			case TRIANGLE:
 				button = triangleButton;
 				break;
-			case RECTANGLE_TOOL:
+			case RECTANGLE:
 				button = rectangleButton;
 				break;
-			case ELLIPSE_TOOL:
+			case ELLIPSE:
 				button = ellipseButton;
 				break;
-			case RECOGNIZE_TOOL:
+			case RECOGNIZE:
 				button = recognizeButton;
 				break;
-			case FREEDRAW_TOOL:
+			case FREEDRAW:
 				button = freedrawButton;
 				break;
 			default:
