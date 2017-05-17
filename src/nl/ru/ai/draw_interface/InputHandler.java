@@ -2,6 +2,8 @@ package nl.ru.ai.draw_interface;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -9,7 +11,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class InputHandler implements ActionListener, MouseListener, MouseMotionListener, ChangeListener {
+public class InputHandler implements ActionListener, MouseListener, MouseMotionListener, ChangeListener, KeyListener {
 	@Override
 	public void actionPerformed( ActionEvent e ) {
 
@@ -52,6 +54,21 @@ public class InputHandler implements ActionListener, MouseListener, MouseMotionL
 
 	@Override
 	public void stateChanged( ChangeEvent e ) {
+
+	}
+
+	@Override
+	public void keyPressed( KeyEvent e ) {
+
+	}
+
+	@Override
+	public void keyReleased( KeyEvent e ) {
+
+	}
+
+	@Override
+	public void keyTyped( KeyEvent e ) {
 
 	}
 }

@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -17,11 +18,17 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import nl.ru.ai.selforganisingmap.DataVector;
@@ -42,7 +49,7 @@ public class DrawPanel extends JPanel {
 	private static final float STROKEWIDTH_INIT = 5.0f;
 	private static final float RECOGNIZE_STROKEWIDTH = 5.0f;
 
-	private static final int HISTORY_SIZE = 20;
+	private static final int HISTORY_SIZE = 50;
 
 	private static final String[] TOOLTIPTEXT = { "Move", "Resize", "Rotate", "Move to foreground", "Move to background", "Delete" };
 
@@ -78,14 +85,18 @@ public class DrawPanel extends JPanel {
 	private JButton deleteButton;
 	private JButton currentButton;
 
+	private InputMap inputMap;
+	private ActionMap actionMap;
+	private Action undoAction = new AbstractAction() {
+		public void actionPerformed( ActionEvent e ) {
+			undoLastAction();
+		}
+	};
+
 	private InputHandler inputHandler = new InputHandler() {
 		@Override
 		public void actionPerformed( ActionEvent e ) {
-			int shapeIndex = 0;
-			int intersectIndex = 0;
 			Drawable shape = null;
-			Rectangle2D bounds = null;
-			boolean shapeFound = false;
 			ActionState state = null;
 			switch ( e.getActionCommand() ) {
 			case "Move":
@@ -114,7 +125,7 @@ public class DrawPanel extends JPanel {
 				state = new ActionState( ActionType_t.MOVE_LAYER_UP );
 				state.setShape( shape );
 				addToHistory( state );
-				
+
 				moveShapeUp( shape );
 
 				break;
@@ -126,7 +137,7 @@ public class DrawPanel extends JPanel {
 				state = new ActionState( ActionType_t.MOVE_LAYER_DOWN );
 				state.setShape( shape );
 				addToHistory( state );
-				
+
 				moveShapeDown( shape );
 
 				break;
@@ -453,7 +464,6 @@ public class DrawPanel extends JPanel {
 
 				break;
 			case RECOGNIZE:
-				// TODO: rename shapeset
 				if ( dragging ) {
 					recognizeShape.add( lastCoords.getX(), lastCoords.getY(), mouseCoords.getX(), mouseCoords.getY() );
 				}
@@ -540,6 +550,13 @@ public class DrawPanel extends JPanel {
 
 			repaint();
 		}
+
+		@Override
+		public void keyPressed( KeyEvent e ) {
+			if ( e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z ) {
+				undoLastAction();
+			}
+		}
 	};
 
 	public DrawPanel() {
@@ -619,6 +636,9 @@ public class DrawPanel extends JPanel {
 		deleteButton.setVisible( false );
 
 		currentButton = moveButton;
+
+		this.getInputMap( JComponent.WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( "control Z" ), "undo" );
+		this.getActionMap().put( "undo", undoAction );
 	}
 
 	public void setToolPanel( ToolPanel buttonPanel ) {
@@ -892,7 +912,6 @@ public class DrawPanel extends JPanel {
 		}
 	}
 
-	// TODO: change any if statements for selected drawable undos
 	public void undoLastAction() {
 		if ( !history.empty() ) {
 			ActionState dState = history.pop();
@@ -956,15 +975,13 @@ public class DrawPanel extends JPanel {
 				textObject.setText( dState.getText() );
 
 				break;
-			// TODO: add move layer up undo
 			case MOVE_LAYER_UP:
 				moveShapeDown( dState.getShape() );
-				
+
 				break;
-			// TODO: add move layer down undo
 			case MOVE_LAYER_DOWN:
 				moveShapeUp( dState.getShape() );
-				
+
 				break;
 			}
 
