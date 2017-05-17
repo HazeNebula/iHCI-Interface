@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -41,6 +42,8 @@ public class DrawPanel extends JPanel {
 	private static final float STROKEWIDTH_INIT = 5.0f;
 	private static final float RECOGNIZE_STROKEWIDTH = 5.0f;
 
+	private static final int HISTORY_SIZE = 20;
+
 	private static final String[] TOOLTIPTEXT = { "Move", "Resize", "Rotate", "Move to foreground", "Move to background", "Delete" };
 
 	private ToolPanel toolPanel;
@@ -52,6 +55,9 @@ public class DrawPanel extends JPanel {
 	private FreeShape recognizeShape;
 
 	private Point2D lastCoords;
+	private Point2D startingCoords;
+	private Point2D startingScale;
+	private double startingAngle;
 	private boolean dragging;
 	private boolean shapeSet;
 	private Tool_t tool;
@@ -62,6 +68,8 @@ public class DrawPanel extends JPanel {
 	private Color backupLineColor;
 	private Color fillColor;
 	private Color backupFillColor;
+
+	private Stack<ActionState> history;
 
 	private JButton moveButton;
 	private JButton resizeButton;
@@ -79,6 +87,7 @@ public class DrawPanel extends JPanel {
 			Drawable shape = null;
 			Rectangle2D bounds = null;
 			boolean shapeFound = false;
+			ActionState state = null;
 			switch ( e.getActionCommand() ) {
 			case "Move":
 				setButtonSelection( Tool_t.MOVESELECTED );
@@ -102,55 +111,34 @@ public class DrawPanel extends JPanel {
 				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
 
 				shape = selection.getShape();
-				bounds = shape.getBounds();
-				for ( int i = 0; i < shapes.size(); ++i ) {
-					if ( shape == shapes.get( i ) ) {
-						shapeIndex = i;
-						break;
-					}
-				}
-				
-				for ( int i = shapeIndex + 1; i < shapes.size(); ++i ) {
-					if ( shapes.get( i ).intersects( bounds ) ) {
-						intersectIndex = i;
-						shapeFound = true;
-						break;
-					}
-				}
 
-				if ( shapeFound ) {
-					shapes.add( intersectIndex, shapes.remove( shapeIndex ) );
-				}
+				state = new ActionState( ActionType_t.MOVE_LAYER_UP );
+				state.setShape( shape );
+				addToHistory( state );
+				
+				moveShapeUp( shape );
 
 				break;
 			case "LayerDown":
 				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
 
 				shape = selection.getShape();
-				bounds = shape.getBounds();
-				for ( int i = shapes.size() - 1; i >= 0; --i ) {
-					if ( shape == shapes.get( i ) ) {
-						shapeIndex = i;
-						break;
-					}
-				}
-				
-				for ( int i = shapeIndex - 1; i >= 0; --i ) {
-					if ( shapes.get( i ).intersects( bounds ) ) {
-						intersectIndex = i;
-						shapeFound = true;
-						break;
-					}
-				}
 
-				if ( shapeFound ) {
-					shapes.add( intersectIndex, shapes.remove( shapeIndex ) );
-				}
+				state = new ActionState( ActionType_t.MOVE_LAYER_DOWN );
+				state.setShape( shape );
+				addToHistory( state );
+				
+				moveShapeDown( shape );
 
 				break;
 			case "Delete":
 				tool = Tool_t.SELECTION;
 				shape = selection.getShape();
+
+				state = new ActionState( ActionType_t.DELETE_DRAWABLE );
+				state.setShapes( new ArrayList<Drawable>( shapes ) );
+				state.setShape( shape );
+				addToHistory( state );
 
 				if ( shape != null ) {
 					for ( int i = 0; i < shapes.size(); ++i ) {
@@ -176,9 +164,13 @@ public class DrawPanel extends JPanel {
 
 		@Override
 		public void mousePressed( MouseEvent e ) {
-			Point mouseCoords = new Point( e.getX(), e.getY() );
+			Point2D mouseCoords = new Point2D.Double( e.getX(), e.getY() );
 
 			if ( tool != Tool_t.SELECTION && tool != Tool_t.MOVESELECTED && tool != Tool_t.RESIZESELECTED && tool != Tool_t.ROTATESELECTED && selection != null ) {
+				ActionState state = new ActionState( ActionType_t.DESELECT_DRAWABLE );
+				state.setShape( selection.getShape() );
+				addToHistory( state );
+
 				removeSelection();
 			}
 
@@ -187,20 +179,48 @@ public class DrawPanel extends JPanel {
 				int contained = -1;
 
 				for ( int i = shapes.size() - 1; i >= 0; --i ) {
-					if ( shapes.get( i ).contains( mouseCoords.x, mouseCoords.y ) ) {
+					if ( shapes.get( i ).contains( (int)mouseCoords.getX(), (int)mouseCoords.getY() ) ) {
 						contained = i;
 						break;
 					}
 				}
 
 				if ( contained != -1 ) {
+					addToHistory( new ActionState( ActionType_t.SELECT_DRAWABLE ) );
+
 					createSelection( shapes.get( contained ) );
 				} else {
-					removeSelection();
+					if ( selection != null ) {
+						ActionState state = new ActionState( ActionType_t.DESELECT_DRAWABLE );
+						state.setShape( selection.getShape() );
+						addToHistory( state );
+
+						removeSelection();
+					}
+				}
+
+				break;
+			case MOVESELECTED:
+				if ( !dragging ) {
+					startingCoords = (Point2D)mouseCoords.clone();
+				}
+
+				break;
+			case RESIZESELECTED:
+				if ( !dragging && selection != null ) {
+					startingScale = selection.getShape().getScale();
+				}
+
+				break;
+			case ROTATESELECTED:
+				if ( !dragging && selection != null ) {
+					Drawable shape = selection.getShape();
+					startingAngle = shape.getAngle();
 				}
 
 				break;
 			case IMAGE:
+				// TODO: hardcode eiffel tower image as default
 				JFileChooser fc = new JFileChooser( Paths.get( "." ).toAbsolutePath().normalize().toString() );
 				FileNameExtensionFilter filter = new FileNameExtensionFilter( "Image files", "png", "bmp", "jpg", "jpeg" );
 				fc.setFileFilter( filter );
@@ -217,7 +237,13 @@ public class DrawPanel extends JPanel {
 						return;
 					}
 
-					shapes.add( new Image( mouseCoords.getX(), mouseCoords.getY(), mouseCoords.getX() + img.getWidth(), mouseCoords.getY() + img.getHeight(), img ) );
+					Image image = new Image( mouseCoords.getX(), mouseCoords.getY(), mouseCoords.getX() + img.getWidth(), mouseCoords.getY() + img.getHeight(), img );
+
+					ActionState state = new ActionState( ActionType_t.ADD_DRAWABLE );
+					state.setShapes( new ArrayList<Drawable>( shapes ) );
+					addToHistory( state );
+
+					shapes.add( image );
 				}
 
 				break;
@@ -225,7 +251,7 @@ public class DrawPanel extends JPanel {
 				int changeTextIndex = -1;
 				for ( int i = 0; i < shapes.size(); ++i ) {
 					String className = shapes.get( i ).getClass().getName();
-					boolean contains = shapes.get( i ).contains( mouseCoords.x, mouseCoords.y );
+					boolean contains = shapes.get( i ).contains( (int)mouseCoords.getX(), (int)mouseCoords.getY() );
 
 					if ( className.equals( "nl.ru.ai.draw_interface.Text" ) && contains ) {
 						changeTextIndex = i;
@@ -236,12 +262,24 @@ public class DrawPanel extends JPanel {
 				if ( changeTextIndex == -1 ) {
 					String text = (String)JOptionPane.showInputDialog( (DrawPanel)e.getSource(), "Enter text:", "Text", JOptionPane.PLAIN_MESSAGE, null, null, "Text" );
 					if ( text != null ) {
-						shapes.add( new Text( mouseCoords.getX(), mouseCoords.getY(), text, lineColor ) );
+						Text textObject = new Text( mouseCoords.getX(), mouseCoords.getY(), text, lineColor );
+
+						ActionState state = new ActionState( ActionType_t.ADD_DRAWABLE );
+						state.setShapes( new ArrayList<Drawable>( shapes ) );
+						addToHistory( state );
+
+						shapes.add( textObject );
 					}
 				} else {
 					String newText = (String)JOptionPane.showInputDialog( (DrawPanel)e.getSource(), "Change text:", "Text", JOptionPane.PLAIN_MESSAGE, null, null, "Text" );
 					if ( newText != null ) {
 						Text textObject = (Text)shapes.get( changeTextIndex );
+
+						ActionState state = new ActionState( ActionType_t.CHANGE_TEXT );
+						state.setShape( textObject );
+						state.setText( textObject.getText() );
+						addToHistory( state );
+
 						textObject.setText( newText );
 					}
 				}
@@ -256,26 +294,98 @@ public class DrawPanel extends JPanel {
 
 		@Override
 		public void mouseReleased( MouseEvent e ) {
+			Point2D mouseCoords = new Point2D.Double( e.getX(), e.getY() );
+			ActionState state = null;
+
 			switch ( tool ) {
+			case MOVESELECTED:
+				if ( selection != null ) {
+					state = new ActionState( ActionType_t.MOVE_DRAWABLE );
+					Drawable shape = selection.getShape();
+					Point2D oldTranslation = shape.getTranslation();
+					Point2D translation = new Point2D.Double( startingCoords.getX() - mouseCoords.getX() + oldTranslation.getX(), startingCoords.getY() - mouseCoords.getY() + oldTranslation.getY() );
+					state.setTranslation( translation );
+
+					addToHistory( state );
+				}
+
+				break;
+			case RESIZESELECTED:
+				state = new ActionState( ActionType_t.RESIZE_DRAWABLE );
+				state.setScale( startingScale );
+				addToHistory( state );
+
+				break;
+			case ROTATESELECTED:
+				state = new ActionState( ActionType_t.ROTATE_DRAWABLE );
+				state.setAngle( startingAngle );
+				addToHistory( state );
+
+				break;
+			case LINE:
+				state = new ActionState( ActionType_t.ADD_DRAWABLE );
+				state.setShapes( new ArrayList<Drawable>( shapes ) );
+				addToHistory( state );
+
+				break;
+			case TRIANGLE:
+				state = new ActionState( ActionType_t.ADD_DRAWABLE );
+				state.setShapes( new ArrayList<Drawable>( shapes ) );
+				addToHistory( state );
+
+				break;
+			case RECTANGLE:
+				state = new ActionState( ActionType_t.ADD_DRAWABLE );
+				state.setShapes( new ArrayList<Drawable>( shapes ) );
+				addToHistory( state );
+
+				break;
+			case ELLIPSE:
+				state = new ActionState( ActionType_t.ADD_DRAWABLE );
+				state.setShapes( new ArrayList<Drawable>( shapes ) );
+				addToHistory( state );
+
+				break;
 			case RECOGNIZE:
 				if ( dragging && shapeSet ) {
 					if ( recognizeShape.isStraightLine() ) {
 						Point2D[] coords = recognizeShape.getEndPoints();
-						shapes.add( new Line( coords[0].getX(), coords[0].getY(), coords[1].getX(), coords[1].getY(), lineColor, fillColor, stroke ) );
+						Line line = new Line( coords[0].getX(), coords[0].getY(), coords[1].getX(), coords[1].getY(), lineColor, fillColor, stroke );
+
+						state = new ActionState( ActionType_t.ADD_DRAWABLE );
+						state.setShapes( new ArrayList<Drawable>( shapes ) );
+						addToHistory( state );
+
+						shapes.add( line );
 					} else {
 						DataVector vector = recognizeShape.getDataVector();
 						Rectangle2D bounds = recognizeShape.getBounds();
 						Polygon_t type = map.getClassification( vector );
+						state = new ActionState( ActionType_t.ADD_DRAWABLE );
 
 						switch ( type ) {
 						case TRIANGLE:
-							shapes.add( new Triangle( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke ) );
+							Triangle triangle = new Triangle( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke );
+							state.setShapes( new ArrayList<Drawable>( shapes ) );
+							addToHistory( state );
+
+							shapes.add( triangle );
+
 							break;
 						case RECTANGLE:
-							shapes.add( new Rectangle( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke ) );
+							Rectangle rectangle = new Rectangle( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke );
+							state.setShapes( new ArrayList<Drawable>( shapes ) );
+							addToHistory( state );
+
+							shapes.add( rectangle );
+
 							break;
 						case ELLIPSE:
-							shapes.add( new Ellipse( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke ) );
+							Ellipse ellipse = new Ellipse( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke );
+							state.setShapes( new ArrayList<Drawable>( shapes ) );
+							addToHistory( state );
+
+							shapes.add( ellipse );
 							break;
 						default:
 							break;
@@ -344,6 +454,7 @@ public class DrawPanel extends JPanel {
 
 				break;
 			case RECOGNIZE:
+				// TODO: rename shapeset
 				if ( dragging ) {
 					recognizeShape.add( lastCoords.getX(), lastCoords.getY(), mouseCoords.getX(), mouseCoords.getY() );
 					shapeSet = true;
@@ -358,7 +469,13 @@ public class DrawPanel extends JPanel {
 					FreeShape freeShape = (FreeShape)shapes.get( shapes.size() - 1 );
 					freeShape.add( lastCoords.getX(), lastCoords.getY(), mouseCoords.getX(), mouseCoords.getY() );
 				} else {
-					shapes.add( new FreeShape( lineColor, fillColor, stroke ) );
+					FreeShape shape = new FreeShape( lineColor, fillColor, stroke );
+
+					ActionState state = new ActionState( ActionType_t.ADD_DRAWABLE );
+					state.setShapes( new ArrayList<Drawable>( shapes ) );
+					addToHistory( state );
+
+					shapes.add( shape );
 				}
 
 				lastCoords = mouseCoords;
@@ -447,6 +564,8 @@ public class DrawPanel extends JPanel {
 		backupFillColor = fillColor;
 		stroke = new BasicStroke( STROKEWIDTH_INIT );
 		backupStroke = stroke;
+
+		history = new Stack<ActionState>();
 
 		addMouseListener( inputHandler );
 		addMouseMotionListener( inputHandler );
@@ -607,6 +726,16 @@ public class DrawPanel extends JPanel {
 
 		if ( selection != null ) {
 			Drawable shape = selection.getShape();
+
+			if ( !history.isEmpty() ) {
+				ActionState lastState = history.peek();
+				if ( lastState.getActionType() != ActionType_t.CHANGE_LINEWIDTH ) {
+					ActionState state = new ActionState( ActionType_t.CHANGE_LINEWIDTH );
+					state.setStroke( shape.getStroke() );
+					addToHistory( state );
+				}
+			}
+
 			shape.setStroke( stroke );
 
 			repaint();
@@ -652,6 +781,16 @@ public class DrawPanel extends JPanel {
 
 		if ( selection != null ) {
 			Drawable shape = selection.getShape();
+
+			if ( !history.isEmpty() ) {
+				ActionState lastState = history.peek();
+				if ( lastState.getActionType() != ActionType_t.CHANGE_LINECOLOR ) {
+					ActionState state = new ActionState( ActionType_t.CHANGE_LINECOLOR );
+					state.setLineColor( shape.getLineColor() );
+					addToHistory( state );
+				}
+			}
+
 			shape.setLineColor( lineColor );
 
 			repaint();
@@ -663,19 +802,177 @@ public class DrawPanel extends JPanel {
 
 		if ( selection != null ) {
 			Drawable shape = selection.getShape();
+
+			if ( !history.isEmpty() ) {
+				ActionState lastState = history.peek();
+				if ( lastState.getActionType() != ActionType_t.CHANGE_FILLCOLOR ) {
+					ActionState state = new ActionState( ActionType_t.CHANGE_FILLCOLOR );
+					state.setFillColor( shape.getFillColor() );
+					addToHistory( state );
+				}
+			}
+
 			shape.setFillColor( fillColor );
 
 			repaint();
 		}
 	}
 
+	private void moveShapeUp( Drawable shape ) {
+		Rectangle2D bounds = shape.getBounds();
+
+		int shapeIndex = -1;
+		for ( int i = 0; i < shapes.size(); ++i ) {
+			if ( shape == shapes.get( i ) ) {
+				shapeIndex = i;
+				break;
+			}
+		}
+
+		if ( shapeIndex >= 0 ) {
+			int intersectIndex = -1;
+			for ( int i = shapeIndex + 1; i < shapes.size(); ++i ) {
+				if ( shapes.get( i ).intersects( bounds ) ) {
+					intersectIndex = i;
+					break;
+				}
+			}
+
+			if ( intersectIndex >= 0 ) {
+				shapes.add( intersectIndex, shapes.remove( shapeIndex ) );
+			}
+		}
+	}
+
+	private void moveShapeDown( Drawable shape ) {
+		Rectangle2D bounds = shape.getBounds();
+
+		int shapeIndex = -1;
+		for ( int i = shapes.size() - 1; i >= 0; --i ) {
+			if ( shape == shapes.get( i ) ) {
+				shapeIndex = i;
+				break;
+			}
+		}
+
+		if ( shapeIndex >= -1 ) {
+			int intersectIndex = -1;
+			for ( int i = shapeIndex - 1; i >= 0; --i ) {
+				if ( shapes.get( i ).intersects( bounds ) ) {
+					intersectIndex = i;
+					break;
+				}
+			}
+
+			if ( intersectIndex >= 0 ) {
+				shapes.add( intersectIndex, shapes.remove( shapeIndex ) );
+			}
+		}
+	}
+
 	public void clearShapes() {
 		if ( selection != null ) {
+			ActionState state = new ActionState( ActionType_t.DESELECT_DRAWABLE );
+			state.setShape( selection.getShape() );
+			addToHistory( state );
+
 			removeSelection();
 		}
 
+		ActionState state = new ActionState( ActionType_t.CLEAR_ALL );
+		state.setShapes( new ArrayList<Drawable>( shapes ) );
+		addToHistory( state );
+
 		shapes.clear();
 		repaint();
+	}
+
+	private void addToHistory( ActionState state ) {
+		history.push( state );
+
+		while ( history.size() > HISTORY_SIZE ) {
+			history.remove( 0 );
+		}
+	}
+
+	// TODO: change any if statements for selected drawable undos
+	public void undoLastAction() {
+		if ( !history.empty() ) {
+			ActionState dState = history.pop();
+
+			switch ( dState.getActionType() ) {
+			case SELECT_DRAWABLE:
+				removeSelection();
+
+				break;
+			case DESELECT_DRAWABLE:
+				createSelection( dState.getShape() );
+
+				break;
+			case MOVE_DRAWABLE:
+				if ( selection != null ) {
+					selection.getShape().setTranslation( dState.getTranslation() );
+				}
+
+				break;
+			case RESIZE_DRAWABLE:
+				if ( selection != null ) {
+					selection.getShape().setScale( dState.getScale() );
+				}
+
+				break;
+			case ROTATE_DRAWABLE:
+				if ( selection != null ) {
+					selection.getShape().setAngle( dState.getAngle() );
+				}
+
+				break;
+			case ADD_DRAWABLE:
+				shapes = dState.getShapes();
+
+				break;
+			case DELETE_DRAWABLE:
+				shapes = dState.getShapes();
+				createSelection( dState.getShape() );
+
+				break;
+			case CLEAR_ALL:
+				shapes = dState.getShapes();
+
+				break;
+			case CHANGE_LINEWIDTH:
+				if ( selection != null ) {
+					selection.getShape().setStroke( dState.getStroke() );
+				}
+
+				break;
+			case CHANGE_LINECOLOR:
+				selection.getShape().setLineColor( dState.getLineColor() );
+
+				break;
+			case CHANGE_FILLCOLOR:
+				selection.getShape().setFillColor( dState.getFillColor() );
+
+				break;
+			case CHANGE_TEXT:
+				Text textObject = (Text)dState.getShape();
+				textObject.setText( dState.getText() );
+
+				break;
+			// TODO: add move layer up undo
+			case MOVE_LAYER_UP:
+				moveShapeDown( dState.getShape() );
+				
+				break;
+			// TODO: add move layer down undo
+			case MOVE_LAYER_DOWN:
+				moveShapeUp( dState.getShape() );
+				
+				break;
+			}
+
+			repaint();
+		}
 	}
 
 	@Override
@@ -691,8 +988,8 @@ public class DrawPanel extends JPanel {
 		recognizeShape.draw( g2d );
 
 		if ( selection != null ) {
-			updateSelection();
 			selection.draw( g2d );
+			updateSelection();
 		}
 	}
 }

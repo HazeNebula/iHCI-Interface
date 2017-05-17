@@ -198,4 +198,8 @@ public class Text implements Drawable {
 	public Rectangle2D getBounds() {
 		return rectangle.getBounds2D();
 	}
+	
+	public String getText() {
+		return text;
+	}
 }

@@ -196,6 +196,8 @@ public class ColorPanel extends JPanel {
 		case "Cyan":
 			color = Color.CYAN;
 			break;
+		case "NoColor":
+			color = new Color( 0x00FFFFFF, true );
 		default:
 			color = new Color( 0x00FFFFFF, true );
 			break;

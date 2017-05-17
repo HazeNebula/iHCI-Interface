@@ -98,9 +98,8 @@ public class ToolPanel extends JPanel {
 				drawPanel.setTool( Tool_t.NONE );
 				break;
 			case "Undo":
-				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
 				drawPanel.undoLastAction();
-				drawPanel.setTool( Tool_t.NONE );
+				break;
 			}
 
 			drawPanel.setButtonSelection( null );
