@@ -111,7 +111,7 @@ public class DrawPanel extends JPanel {
 				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
 
 				shape = selection.getShape();
-				
+
 				state = new ActionState( ActionType_t.MOVE_LAYER_UP );
 				state.setShape( shape );
 				addToHistory( state );
@@ -123,7 +123,7 @@ public class DrawPanel extends JPanel {
 				currentButton.setBackground( BUTTONCOLOR_DEFAULT );
 
 				shape = selection.getShape();
-				
+
 				state = new ActionState( ActionType_t.MOVE_LAYER_DOWN );
 				state.setShape( shape );
 				addToHistory( state );
