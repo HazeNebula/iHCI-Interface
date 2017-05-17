@@ -59,7 +59,6 @@ public class DrawPanel extends JPanel {
 	private Point2D startingScale;
 	private double startingAngle;
 	private boolean dragging;
-	private boolean shapeSet;
 	private Tool_t tool;
 	private Selection selection;
 	private BasicStroke stroke;
@@ -347,7 +346,7 @@ public class DrawPanel extends JPanel {
 
 				break;
 			case RECOGNIZE:
-				if ( dragging && shapeSet ) {
+				if ( dragging && recognizeShape.size() >= 1 ) {
 					if ( recognizeShape.isStraightLine() ) {
 						Point2D[] coords = recognizeShape.getEndPoints();
 						Line line = new Line( coords[0].getX(), coords[0].getY(), coords[1].getX(), coords[1].getY(), lineColor, fillColor, stroke );
@@ -457,7 +456,6 @@ public class DrawPanel extends JPanel {
 				// TODO: rename shapeset
 				if ( dragging ) {
 					recognizeShape.add( lastCoords.getX(), lastCoords.getY(), mouseCoords.getX(), mouseCoords.getY() );
-					shapeSet = true;
 				}
 
 				lastCoords = mouseCoords;
@@ -556,7 +554,6 @@ public class DrawPanel extends JPanel {
 		lastCoords = new Point( 0, 0 );
 
 		dragging = false;
-		shapeSet = false;
 
 		lineColor = LINECOLOR_INIT;
 		backupLineColor = lineColor;
