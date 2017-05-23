@@ -328,53 +328,60 @@ public class DrawPanel extends JPanel {
 				addToHistory( state );
 
 				break;
-			// FIXME: check if mouse has moved in mousereleased event
 			case LINE:
-				state = new ActionState( ActionType_t.ADD_DRAWABLE );
-				if ( shapes.size() <= 1 ) {
-					state.setShapes( new ArrayList<Drawable>() );
-				} else {
-					ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
-					shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
-					state.setShapes( shapesCopy );
+				if ( dragging ) {
+					state = new ActionState( ActionType_t.ADD_DRAWABLE );
+					if ( shapes.size() <= 1 ) {
+						state.setShapes( new ArrayList<Drawable>() );
+					} else {
+						ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
+						shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
+						state.setShapes( shapesCopy );
+					}
+					addToHistory( state );
 				}
-				addToHistory( state );
 
 				break;
 			case TRIANGLE:
-				state = new ActionState( ActionType_t.ADD_DRAWABLE );
-				if ( shapes.size() <= 1 ) {
-					state.setShapes( new ArrayList<Drawable>() );
-				} else {
-					ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
-					shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
-					state.setShapes( shapesCopy );
+				if ( dragging ) {
+					state = new ActionState( ActionType_t.ADD_DRAWABLE );
+					if ( shapes.size() <= 1 ) {
+						state.setShapes( new ArrayList<Drawable>() );
+					} else {
+						ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
+						shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
+						state.setShapes( shapesCopy );
+					}
+					addToHistory( state );
 				}
-				addToHistory( state );
 
 				break;
 			case RECTANGLE:
-				state = new ActionState( ActionType_t.ADD_DRAWABLE );
-				if ( shapes.size() <= 1 ) {
-					state.setShapes( new ArrayList<Drawable>() );
-				} else {
-					ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
-					shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
-					state.setShapes( shapesCopy );
+				if ( dragging ) {
+					state = new ActionState( ActionType_t.ADD_DRAWABLE );
+					if ( shapes.size() <= 1 ) {
+						state.setShapes( new ArrayList<Drawable>() );
+					} else {
+						ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
+						shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
+						state.setShapes( shapesCopy );
+					}
+					addToHistory( state );
 				}
-				addToHistory( state );
 
 				break;
 			case ELLIPSE:
-				state = new ActionState( ActionType_t.ADD_DRAWABLE );
-				if ( shapes.size() <= 1 ) {
-					state.setShapes( new ArrayList<Drawable>() );
-				} else {
-					ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
-					shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
-					state.setShapes( shapesCopy );
+				if ( dragging ) {
+					state = new ActionState( ActionType_t.ADD_DRAWABLE );
+					if ( shapes.size() <= 1 ) {
+						state.setShapes( new ArrayList<Drawable>() );
+					} else {
+						ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
+						shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
+						state.setShapes( shapesCopy );
+					}
+					addToHistory( state );
 				}
-				addToHistory( state );
 
 				break;
 			case RECOGNIZE:
