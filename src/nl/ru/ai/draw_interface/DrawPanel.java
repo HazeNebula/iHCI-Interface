@@ -329,47 +329,8 @@ public class DrawPanel extends JPanel {
 
 				break;
 			case LINE:
-				if ( dragging ) {
-					state = new ActionState( ActionType_t.ADD_DRAWABLE );
-					if ( shapes.size() <= 1 ) {
-						state.setShapes( new ArrayList<Drawable>() );
-					} else {
-						ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
-						shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
-						state.setShapes( shapesCopy );
-					}
-					addToHistory( state );
-				}
-
-				break;
 			case TRIANGLE:
-				if ( dragging ) {
-					state = new ActionState( ActionType_t.ADD_DRAWABLE );
-					if ( shapes.size() <= 1 ) {
-						state.setShapes( new ArrayList<Drawable>() );
-					} else {
-						ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
-						shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
-						state.setShapes( shapesCopy );
-					}
-					addToHistory( state );
-				}
-
-				break;
 			case RECTANGLE:
-				if ( dragging ) {
-					state = new ActionState( ActionType_t.ADD_DRAWABLE );
-					if ( shapes.size() <= 1 ) {
-						state.setShapes( new ArrayList<Drawable>() );
-					} else {
-						ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
-						shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
-						state.setShapes( shapesCopy );
-					}
-					addToHistory( state );
-				}
-
-				break;
 			case ELLIPSE:
 				if ( dragging ) {
 					state = new ActionState( ActionType_t.ADD_DRAWABLE );
