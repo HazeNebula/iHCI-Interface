@@ -499,7 +499,14 @@ public class DrawPanel extends JPanel {
 
 					if ( shape != null ) {
 						Point2D size = shape.getSize();
+						Point2D center = shape.getCenter();
 						Point2D dCoords = new Point2D.Double( mouseCoords.getX() - lastCoords.getX(), mouseCoords.getY() - lastCoords.getY() );
+						if ( mouseCoords.getX() < center.getX() ) {
+							dCoords = new Point2D.Double( -dCoords.getX(), dCoords.getY() );
+						}
+						if ( mouseCoords.getY() < center.getY() ) {
+							dCoords = new Point2D.Double( dCoords.getX(), -dCoords.getY() );
+						}
 						Point2D dScale = new Point2D.Double( dCoords.getX() / size.getX(), dCoords.getY() / size.getY() );
 						Point2D currentScale = shape.getScale();
 						shape.setScale( new Point2D.Double( currentScale.getX() + dScale.getX(), currentScale.getY() + dScale.getY() ) );
