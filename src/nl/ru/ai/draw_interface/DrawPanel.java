@@ -13,7 +13,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -23,11 +22,9 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import nl.ru.ai.selforganisingmap.DataVector;
 import nl.ru.ai.selforganisingmap.Polygon_t;
@@ -91,7 +88,6 @@ public class DrawPanel extends JPanel {
 	};
 
 	private InputHandler inputHandler = new InputHandler() {
-		// TODO: allow selection functionality while other tools are selected
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			Drawable shape = null;
@@ -182,6 +178,7 @@ public class DrawPanel extends JPanel {
 				removeSelection();
 			}
 
+			ActionState state = new ActionState( null );
 			switch ( tool ) {
 			case SELECTION:
 				int contained = -1;
@@ -199,7 +196,7 @@ public class DrawPanel extends JPanel {
 					createSelection( shapes.get( contained ) );
 				} else {
 					if ( selection != null ) {
-						ActionState state = new ActionState( ActionType_t.DESELECT_DRAWABLE );
+						state = new ActionState( ActionType_t.DESELECT_DRAWABLE );
 						state.setShape( selection.getShape() );
 						addToHistory( state );
 
@@ -228,31 +225,21 @@ public class DrawPanel extends JPanel {
 
 				break;
 			case IMAGE:
-				// TODO: hardcode eiffel tower image as default
-				JFileChooser fc = new JFileChooser( Paths.get( "." ).toAbsolutePath().normalize().toString() );
-				FileNameExtensionFilter filter = new FileNameExtensionFilter( "Image files", "png", "bmp", "jpg", "jpeg" );
-				fc.setFileFilter( filter );
-				fc.setAcceptAllFileFilterUsed( false );
-				int returnVal = fc.showOpenDialog( (DrawPanel)e.getSource() );
-
-				if ( returnVal == JFileChooser.APPROVE_OPTION ) {
-					String filename = fc.getSelectedFile().getName();
-					BufferedImage img = null;
-					try {
-						img = ImageIO.read( new File( filename ) );
-					} catch ( IOException exception ) {
-						System.err.println( "Could not open file\n " + exception.getMessage() );
-						return;
-					}
-
-					Image image = new Image( mouseCoords.getX(), mouseCoords.getY(), mouseCoords.getX() + img.getWidth(), mouseCoords.getY() + img.getHeight(), img );
-
-					ActionState state = new ActionState( ActionType_t.ADD_DRAWABLE );
-					state.setShapes( new ArrayList<Drawable>( shapes ) );
-					addToHistory( state );
-
-					shapes.add( image );
+				state = new ActionState( ActionType_t.ADD_DRAWABLE );
+				state.setShapes( new ArrayList<Drawable>( shapes ) );
+				addToHistory( state );
+				
+				BufferedImage img = null;
+				try {
+					img = ImageIO.read( new File( "eiffel.png" ) );
+				} catch ( IOException exception ) {
+					System.err.println( "Could not open file\n " + exception.getMessage() );
+					return;
 				}
+
+				Image image = new Image( mouseCoords.getX(), mouseCoords.getY(), mouseCoords.getX() + img.getWidth(), mouseCoords.getY() + img.getHeight(), img );
+
+				shapes.add( image );
 
 				break;
 			case TEXT:
@@ -270,12 +257,11 @@ public class DrawPanel extends JPanel {
 				if ( changeTextIndex == -1 ) {
 					String text = (String)JOptionPane.showInputDialog( (DrawPanel)e.getSource(), "Enter text:", "Text", JOptionPane.PLAIN_MESSAGE, null, null, "Text" );
 					if ( text != null ) {
-						Text textObject = new Text( mouseCoords.getX(), mouseCoords.getY(), text, lineColor );
-
-						ActionState state = new ActionState( ActionType_t.ADD_DRAWABLE );
+						state = new ActionState( ActionType_t.ADD_DRAWABLE );
 						state.setShapes( new ArrayList<Drawable>( shapes ) );
 						addToHistory( state );
-
+						
+						Text textObject = new Text( mouseCoords.getX(), mouseCoords.getY(), text, lineColor );
 						shapes.add( textObject );
 					}
 				} else {
@@ -283,7 +269,7 @@ public class DrawPanel extends JPanel {
 					if ( newText != null ) {
 						Text textObject = (Text)shapes.get( changeTextIndex );
 
-						ActionState state = new ActionState( ActionType_t.CHANGE_TEXT );
+						state = new ActionState( ActionType_t.CHANGE_TEXT );
 						state.setShape( textObject );
 						state.setText( textObject.getText() );
 						addToHistory( state );
