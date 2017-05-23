@@ -20,9 +20,7 @@ import java.util.Stack;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
-import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -85,8 +83,6 @@ public class DrawPanel extends JPanel {
 	private JButton deleteButton;
 	private JButton currentButton;
 
-	private InputMap inputMap;
-	private ActionMap actionMap;
 	private Action undoAction = new AbstractAction() {
 		public void actionPerformed( ActionEvent e ) {
 			undoLastAction();
@@ -332,40 +328,64 @@ public class DrawPanel extends JPanel {
 				addToHistory( state );
 
 				break;
+			// FIXME: check if mouse has moved in mousereleased event
 			case LINE:
 				state = new ActionState( ActionType_t.ADD_DRAWABLE );
-				state.setShapes( new ArrayList<Drawable>( shapes ) );
+				if ( shapes.size() <= 1 ) {
+					state.setShapes( new ArrayList<Drawable>() );
+				} else {
+					ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
+					shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
+					state.setShapes( shapesCopy );
+				}
 				addToHistory( state );
 
 				break;
 			case TRIANGLE:
 				state = new ActionState( ActionType_t.ADD_DRAWABLE );
-				state.setShapes( new ArrayList<Drawable>( shapes ) );
+				if ( shapes.size() <= 1 ) {
+					state.setShapes( new ArrayList<Drawable>() );
+				} else {
+					ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
+					shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
+					state.setShapes( shapesCopy );
+				}
 				addToHistory( state );
 
 				break;
 			case RECTANGLE:
 				state = new ActionState( ActionType_t.ADD_DRAWABLE );
-				state.setShapes( new ArrayList<Drawable>( shapes ) );
+				if ( shapes.size() <= 1 ) {
+					state.setShapes( new ArrayList<Drawable>() );
+				} else {
+					ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
+					shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
+					state.setShapes( shapesCopy );
+				}
 				addToHistory( state );
 
 				break;
 			case ELLIPSE:
 				state = new ActionState( ActionType_t.ADD_DRAWABLE );
-				state.setShapes( new ArrayList<Drawable>( shapes ) );
+				if ( shapes.size() <= 1 ) {
+					state.setShapes( new ArrayList<Drawable>() );
+				} else {
+					ArrayList<Drawable> shapesCopy = new ArrayList<Drawable>();
+					shapesCopy.addAll( shapes.subList( 0, shapes.size() - 1 ) );
+					state.setShapes( shapesCopy );
+				}
 				addToHistory( state );
 
 				break;
 			case RECOGNIZE:
 				if ( dragging && recognizeShape.size() >= 1 ) {
 					if ( recognizeShape.isStraightLine() ) {
-						Point2D[] coords = recognizeShape.getEndPoints();
-						Line line = new Line( coords[0].getX(), coords[0].getY(), coords[1].getX(), coords[1].getY(), lineColor, fillColor, stroke );
-
 						state = new ActionState( ActionType_t.ADD_DRAWABLE );
 						state.setShapes( new ArrayList<Drawable>( shapes ) );
 						addToHistory( state );
 
+						Point2D[] coords = recognizeShape.getEndPoints();
+						Line line = new Line( coords[0].getX(), coords[0].getY(), coords[1].getX(), coords[1].getY(), lineColor, fillColor, stroke );
 						shapes.add( line );
 					} else {
 						DataVector vector = recognizeShape.getDataVector();
@@ -375,26 +395,26 @@ public class DrawPanel extends JPanel {
 
 						switch ( type ) {
 						case TRIANGLE:
-							Triangle triangle = new Triangle( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke );
 							state.setShapes( new ArrayList<Drawable>( shapes ) );
 							addToHistory( state );
 
+							Triangle triangle = new Triangle( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke );
 							shapes.add( triangle );
 
 							break;
 						case RECTANGLE:
-							Rectangle rectangle = new Rectangle( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke );
 							state.setShapes( new ArrayList<Drawable>( shapes ) );
 							addToHistory( state );
 
+							Rectangle rectangle = new Rectangle( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke );
 							shapes.add( rectangle );
 
 							break;
 						case ELLIPSE:
-							Ellipse ellipse = new Ellipse( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke );
 							state.setShapes( new ArrayList<Drawable>( shapes ) );
 							addToHistory( state );
 
+							Ellipse ellipse = new Ellipse( bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY(), lineColor, fillColor, stroke );
 							shapes.add( ellipse );
 							break;
 						default:
