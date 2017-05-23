@@ -45,20 +45,20 @@ public class Selection {
 		g.setStroke( oldStroke );
 	}
 
-	public Point2D getButtonSpace( Dimension canvas, int buttonSize, int buttonGapSize ) {
+	public Point2D getButtonSpace( Dimension canvas, int buttonSize, int buttonGapSizeSmall, int buttonGapSizeBig ) {
 		Point2D buttonCoords = new Point2D.Double();
 
-		int widthNeeded = buttonGapSize + buttonSize;
+		int widthNeeded = buttonGapSizeSmall + buttonSize;
 		if ( widthNeeded < ( canvas.width - (int)x2 ) ) {
-			buttonCoords.setLocation( x2 + buttonGapSize, 0.0d );
+			buttonCoords.setLocation( x2 + buttonGapSizeSmall, 0.0d );
 		} else if ( widthNeeded < canvas.width ) {
 			buttonCoords.setLocation( x1 - widthNeeded, 0.0d );
 		} else {
 			return null;
 		}
-		buttonCoords.setLocation( Math.max( Math.min( buttonCoords.getX(), canvas.width - widthNeeded ), buttonGapSize ), 0.0d );
+		buttonCoords.setLocation( Math.max( Math.min( buttonCoords.getX(), canvas.width - widthNeeded ), buttonGapSizeSmall ), 0.0d );
 
-		int heightNeeded = numButtons * ( buttonSize + buttonGapSize );
+		int heightNeeded = numButtons * ( buttonSize + buttonGapSizeSmall ) + buttonGapSizeBig;
 		if ( heightNeeded < ( canvas.height - (int)y1 ) ) {
 			buttonCoords.setLocation( buttonCoords.getX(), y1 );
 		} else if ( heightNeeded < canvas.height ) {
@@ -66,7 +66,7 @@ public class Selection {
 		} else {
 			return null;
 		}
-		buttonCoords.setLocation( buttonCoords.getX(), Math.max( Math.min( buttonCoords.getY(), canvas.height ), buttonGapSize ) );
+		buttonCoords.setLocation( buttonCoords.getX(), Math.max( Math.min( buttonCoords.getY(), canvas.height ), buttonGapSizeSmall ) );
 
 		return buttonCoords;
 	}

@@ -38,7 +38,8 @@ public class DrawPanel extends JPanel {
 
 	private static final int NUM_BUTTONS = 6;
 	private static final int BUTTON_SIZE = 60;
-	private static final int BUTTON_GAP_SIZE = 10;
+	private static final int BUTTON_GAP_SIZE_SMALL = 10;
+	private static final int BUTTON_GAP_SIZE_BIG = 20;
 	private static final Color BUTTONCOLOR_DEFAULT = new Color( 0xFFE0E0E0, true );
 	private static final Color BUTTONCOLOR_SELECTED = new Color( 0xFFE0FFFF, true );
 
@@ -90,6 +91,7 @@ public class DrawPanel extends JPanel {
 	};
 
 	private InputHandler inputHandler = new InputHandler() {
+		// TODO: allow selection functionality while other tools are selected
 		@Override
 		public void actionPerformed( ActionEvent e ) {
 			Drawable shape = null;
@@ -674,15 +676,15 @@ public class DrawPanel extends JPanel {
 	}
 
 	private void updateSelection() {
-		Point2D buttonCoords = selection.getButtonSpace( this.getSize(), BUTTON_SIZE, BUTTON_GAP_SIZE );
+		Point2D buttonCoords = selection.getButtonSpace( this.getSize(), BUTTON_SIZE, BUTTON_GAP_SIZE_SMALL, BUTTON_GAP_SIZE_BIG );
 
 		if ( buttonCoords != null ) {
 			moveButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY(), BUTTON_SIZE, BUTTON_SIZE );
-			resizeButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE + BUTTON_GAP_SIZE, BUTTON_SIZE, BUTTON_SIZE );
-			rotateButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 2 + BUTTON_GAP_SIZE * 2, BUTTON_SIZE, BUTTON_SIZE );
-			layerUpButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 3 + BUTTON_GAP_SIZE * 3, BUTTON_SIZE, BUTTON_SIZE );
-			layerDownButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 4 + BUTTON_GAP_SIZE * 4, BUTTON_SIZE, BUTTON_SIZE );
-			deleteButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 5 + BUTTON_GAP_SIZE * 5, BUTTON_SIZE, BUTTON_SIZE );
+			resizeButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE + BUTTON_GAP_SIZE_SMALL, BUTTON_SIZE, BUTTON_SIZE );
+			rotateButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 2 + BUTTON_GAP_SIZE_SMALL * 2, BUTTON_SIZE, BUTTON_SIZE );
+			layerUpButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 3 + BUTTON_GAP_SIZE_BIG + BUTTON_GAP_SIZE_SMALL * 3, BUTTON_SIZE, BUTTON_SIZE );
+			layerDownButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 4 + BUTTON_GAP_SIZE_BIG + BUTTON_GAP_SIZE_SMALL * 4, BUTTON_SIZE, BUTTON_SIZE );
+			deleteButton.setBounds( (int)buttonCoords.getX(), (int)buttonCoords.getY() + BUTTON_SIZE * 5 + BUTTON_GAP_SIZE_BIG + BUTTON_GAP_SIZE_SMALL * 5, BUTTON_SIZE, BUTTON_SIZE );
 		}
 	}
 
