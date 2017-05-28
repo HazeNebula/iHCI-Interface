@@ -1,8 +1,7 @@
 package nl.ru.ai.draw_interface;
 
 import java.awt.Color;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -44,21 +43,32 @@ public class ColorPanel extends JPanel {
 
 	InputHandler inputHandler = new InputHandler() {
 		@Override
-		public void mousePressed( MouseEvent e ) {
-			changeLineColor = ( e.getModifiers() & InputEvent.BUTTON1_MASK ) == InputEvent.BUTTON1_MASK;
-			JButton button = (JButton)e.getSource();
-			Color color = null;
-			ImageIcon icon = null;
+		public void actionPerformed( ActionEvent e ) {
+			switch ( e.getActionCommand() ) {
+			case "LineColor":
+				changeLineColor = true;
 
-			color = stringToColor( button.getActionCommand() );
-			icon = colorToIcon( color );
+				break;
+			case "FillColor":
+				changeLineColor = false;
 
-			if ( changeLineColor ) {
-				lineColorLabel.setIcon( icon );
-				drawPanel.setLineColor( color );
-			} else {
-				fillColorLabel.setIcon( icon );
-				drawPanel.setFillColor( color );
+				break;
+			default:
+				Color color = null;
+				ImageIcon icon = null;
+
+				color = stringToColor( e.getActionCommand() );
+				icon = colorToIcon( color );
+
+				if ( changeLineColor ) {
+					lineColorLabel.setIcon( icon );
+					drawPanel.setLineColor( color );
+				} else {
+					fillColorLabel.setIcon( icon );
+					drawPanel.setFillColor( color );
+				}
+
+				break;
 			}
 		}
 	};
@@ -69,131 +79,106 @@ public class ColorPanel extends JPanel {
 		blackButton = new JButton();
 		blackButton.setActionCommand( "Black" );
 		blackButton.setBackground( Color.BLACK );
-		blackButton.addMouseListener( inputHandler );
+		blackButton.addActionListener( inputHandler );
 
 		darkGrayButton = new JButton();
 		darkGrayButton.setActionCommand( "DarkGray" );
 		darkGrayButton.setBackground( Color.DARK_GRAY );
-		darkGrayButton.addMouseListener( inputHandler );
+		darkGrayButton.addActionListener( inputHandler );
 
 		grayButton = new JButton();
 		grayButton.setActionCommand( "Gray" );
 		grayButton.setBackground( Color.GRAY );
-		grayButton.addMouseListener( inputHandler );
+		grayButton.addActionListener( inputHandler );
 
 		lightGrayButton = new JButton();
 		lightGrayButton.setActionCommand( "LightGray" );
 		lightGrayButton.setBackground( Color.LIGHT_GRAY );
-		lightGrayButton.addMouseListener( inputHandler );
+		lightGrayButton.addActionListener( inputHandler );
 
 		whiteButton = new JButton();
 		whiteButton.setActionCommand( "White" );
 		whiteButton.setBackground( Color.WHITE );
-		whiteButton.addMouseListener( inputHandler );
+		whiteButton.addActionListener( inputHandler );
 
 		pinkButton = new JButton();
 		pinkButton.setActionCommand( "Pink" );
 		pinkButton.setBackground( Color.PINK );
-		pinkButton.addMouseListener( inputHandler );
+		pinkButton.addActionListener( inputHandler );
 
 		redButton = new JButton();
 		redButton.setActionCommand( "Red" );
 		redButton.setBackground( Color.RED );
-		redButton.addMouseListener( inputHandler );
+		redButton.addActionListener( inputHandler );
 
 		orangeButton = new JButton();
 		orangeButton.setActionCommand( "Orange" );
 		orangeButton.setBackground( Color.ORANGE );
-		orangeButton.addMouseListener( inputHandler );
+		orangeButton.addActionListener( inputHandler );
 
 		yellowButton = new JButton();
 		yellowButton.setActionCommand( "Yellow" );
 		yellowButton.setBackground( Color.YELLOW );
-		yellowButton.addMouseListener( inputHandler );
+		yellowButton.addActionListener( inputHandler );
 
 		greenButton = new JButton();
 		greenButton.setActionCommand( "Green" );
 		greenButton.setBackground( Color.GREEN );
-		greenButton.addMouseListener( inputHandler );
+		greenButton.addActionListener( inputHandler );
 
 		blueButton = new JButton();
 		blueButton.setActionCommand( "Blue" );
 		blueButton.setBackground( Color.BLUE );
-		blueButton.addMouseListener( inputHandler );
+		blueButton.addActionListener( inputHandler );
 
 		magentaButton = new JButton();
 		magentaButton.setActionCommand( "Magenta" );
 		magentaButton.setBackground( Color.MAGENTA );
-		magentaButton.addMouseListener( inputHandler );
+		magentaButton.addActionListener( inputHandler );
 
 		cyanButton = new JButton();
 		cyanButton.setActionCommand( "Cyan" );
 		cyanButton.setBackground( Color.CYAN );
-		cyanButton.addMouseListener( inputHandler );
+		cyanButton.addActionListener( inputHandler );
 
 		noColorButton = new JButton( new ImageIcon( "images\\colors\\noColorIcon.png" ) );
 		noColorButton.setActionCommand( "NoColor" );
 		noColorButton.setBackground( Color.WHITE );
-		noColorButton.addMouseListener( inputHandler );
+		noColorButton.addActionListener( inputHandler );
 
 		lineColorTextLabel = new JLabel( "Line color:" );
 		lineColorTextLabel.setToolTipText( TOOLTIPTEXT[0] );
-		
+
 		lineColorButton = new JRadioButton();
+		lineColorButton.setActionCommand( "LineColor" );
 		lineColorButton.setToolTipText( TOOLTIPTEXT[0] );
 		lineColorButton.setSelected( true );
 		lineColorButton.addActionListener( inputHandler );
-		
+
 		lineColorLabel = new JLabel( new ImageIcon( "images\\colors\\blackIcon.png" ) );
 		lineColorLabel.setToolTipText( TOOLTIPTEXT[0] );
 
 		fillColorTextLabel = new JLabel( "Fill color:" );
 		fillColorTextLabel.setToolTipText( TOOLTIPTEXT[1] );
-		
+
 		fillColorButton = new JRadioButton();
+		fillColorButton.setActionCommand( "FillColor" );
 		fillColorButton.setToolTipText( TOOLTIPTEXT[1] );
 		fillColorButton.addActionListener( inputHandler );
-		
+
 		fillColorLabel = new JLabel( new ImageIcon( "images\\colors\\noColorIcon.png" ) );
 		fillColorLabel.setToolTipText( TOOLTIPTEXT[1] );
-		
-		ButtonGroup group = new ButtonGroup();
-		group.add( lineColorButton );
-		group.add( fillColorButton );
+
+		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.add( lineColorButton );
+		buttonGroup.add( fillColorButton );
 
 		GroupLayout layout = new GroupLayout( this );
 		setLayout( layout );
 		layout.setAutoCreateGaps( true );
 		layout.setAutoCreateContainerGaps( true );
 		layout.setHorizontalGroup( layout.createSequentialGroup().addComponent( blackButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( darkGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( grayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lightGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( whiteButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( pinkButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( redButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( orangeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( yellowButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( greenButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( blueButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( magentaButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( cyanButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( noColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addGroup( layout.createParallelGroup( GroupLayout.Alignment.LEADING ).addComponent( lineColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ).addGroup( layout.createParallelGroup( GroupLayout.Alignment.LEADING ).addComponent( lineColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ).addGroup( layout.createParallelGroup( GroupLayout.Alignment.LEADING ).addComponent( lineColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
-		layout.setVerticalGroup( 
-			layout.createParallelGroup( GroupLayout.Alignment.CENTER )
-				.addComponent( blackButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( darkGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( grayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( lightGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( whiteButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( pinkButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( redButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( orangeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( yellowButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( greenButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( blueButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( magentaButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( cyanButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( noColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addGroup( 
-					layout.createSequentialGroup()
-						.addComponent( lineColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-						.addComponent( fillColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
-				.addGroup( 
-					layout.createSequentialGroup()
-						.addComponent( lineColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-						.addComponent( fillColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
-				.addGroup( 
-					layout.createSequentialGroup()
-						.addComponent( lineColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-						.addComponent( fillColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
+		layout.setVerticalGroup( layout.createParallelGroup( GroupLayout.Alignment.CENTER ).addComponent( blackButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( darkGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( grayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lightGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( whiteButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( pinkButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( redButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( orangeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( yellowButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( greenButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( blueButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( magentaButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( cyanButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( noColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addGroup( layout.createSequentialGroup().addComponent( lineColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ).addGroup( layout.createSequentialGroup().addComponent( lineColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ).addGroup( layout.createSequentialGroup().addComponent( lineColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
 	}
 
 	public void setDrawPanel( DrawPanel drawPanel ) {
