@@ -57,7 +57,7 @@ public class Line implements Drawable {
 
 	@Override
 	public boolean contains( int x, int y ) {
-		return ( x >= getMinX() && x <= getMaxX() && y >= getMinY() && y <= getMaxY() && line.ptLineDist( (double)x, (double)y ) < HITBOX_SIZE );
+		return line.ptSegDist( (double)x, (double)y ) < HITBOX_SIZE;
 	}
 	
 	@Override
