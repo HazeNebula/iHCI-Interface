@@ -177,8 +177,64 @@ public class ColorPanel extends JPanel {
 		setLayout( layout );
 		layout.setAutoCreateGaps( true );
 		layout.setAutoCreateContainerGaps( true );
-		layout.setHorizontalGroup( layout.createSequentialGroup().addComponent( blackButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( darkGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( grayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lightGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( whiteButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( pinkButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( redButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( orangeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( yellowButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( greenButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( blueButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( magentaButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( cyanButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( noColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addGroup( layout.createParallelGroup( GroupLayout.Alignment.LEADING ).addComponent( lineColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ).addGroup( layout.createParallelGroup( GroupLayout.Alignment.LEADING ).addComponent( lineColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ).addGroup( layout.createParallelGroup( GroupLayout.Alignment.LEADING ).addComponent( lineColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
-		layout.setVerticalGroup( layout.createParallelGroup( GroupLayout.Alignment.CENTER ).addComponent( blackButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( darkGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( grayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lightGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( whiteButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( pinkButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( redButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( orangeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( yellowButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( greenButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( blueButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( magentaButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( cyanButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( noColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addGroup( layout.createSequentialGroup().addComponent( lineColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ).addGroup( layout.createSequentialGroup().addComponent( lineColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ).addGroup( layout.createSequentialGroup().addComponent( lineColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( fillColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
+		
+		layout.setHorizontalGroup( 
+			layout.createSequentialGroup()
+				.addComponent( blackButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( darkGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( grayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( lightGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( whiteButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( pinkButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( redButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( orangeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( yellowButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( greenButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( blueButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( magentaButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( cyanButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( noColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addGroup( 
+					layout.createParallelGroup( GroupLayout.Alignment.LEADING )
+						.addComponent( lineColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+						.addComponent( fillColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
+				.addGroup( 
+					layout.createParallelGroup( GroupLayout.Alignment.LEADING )
+						.addComponent( lineColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+						.addComponent( fillColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
+				.addGroup( 
+					layout.createParallelGroup( GroupLayout.Alignment.LEADING )
+						.addComponent( lineColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+						.addComponent( fillColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
+		
+		layout.setVerticalGroup( 
+			layout.createParallelGroup( GroupLayout.Alignment.CENTER )
+				.addComponent( blackButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( darkGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( grayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( lightGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( whiteButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( pinkButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( redButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( orangeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( yellowButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( greenButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( blueButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( magentaButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( cyanButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( noColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addGroup( 
+					layout.createSequentialGroup()
+						.addComponent( lineColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+						.addComponent( fillColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
+				.addGroup( 
+					layout.createSequentialGroup()
+						.addComponent( lineColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+						.addComponent( fillColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
+				.addGroup( 
+					layout.createSequentialGroup()
+						.addComponent( lineColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+						.addComponent( fillColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
 	}
 
 	public void setDrawPanel( DrawPanel drawPanel ) {

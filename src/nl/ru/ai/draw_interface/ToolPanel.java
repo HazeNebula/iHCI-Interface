@@ -195,8 +195,38 @@ public class ToolPanel extends JPanel {
 		setLayout( layout );
 		layout.setAutoCreateGaps( true );
 		layout.setAutoCreateContainerGaps( true );
-		layout.setHorizontalGroup( layout.createSequentialGroup().addGroup( layout.createParallelGroup( GroupLayout.Alignment.CENTER ).addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( recognizeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( freedrawButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( undoButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( clearAllButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthSlider, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
-		layout.setVerticalGroup( layout.createSequentialGroup().addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( recognizeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( freedrawButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( undoButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( clearAllButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent( strokeWidthLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ).addComponent( strokeWidthSlider, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) );
+		
+		layout.setHorizontalGroup( 
+			layout.createParallelGroup( GroupLayout.Alignment.CENTER )
+				.addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( recognizeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( freedrawButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( undoButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( clearAllButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( strokeWidthLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( strokeWidthSlider, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) );
+		
+		layout.setVerticalGroup( 
+			layout.createSequentialGroup()
+				.addComponent( selectButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( imageButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( textButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( lineButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( triangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( rectangleButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( ellipseButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( recognizeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( freedrawButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( undoButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( clearAllButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent( strokeWidthLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+				.addComponent( strokeWidthSlider, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) );
 
 		currentButton = recognizeButton;
 		currentButton.setBackground( BUTTONCOLOR_SELECTED );
