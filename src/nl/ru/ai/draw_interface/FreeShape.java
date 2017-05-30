@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -16,6 +17,7 @@ import nl.ru.ai.selforganisingmap.DataVector;
 
 public class FreeShape implements Drawable {
 	private static final int MAPVECTOR_SIZE = 30;
+	private static final double MAX_DIST_FROM_LINE = 30.0d;
 
 	private Shape rect;
 	private ArrayList<Line> shape;
@@ -269,38 +271,16 @@ public class FreeShape implements Drawable {
 		return shape.size();
 	}
 
-	public double getAngle( int firstIndex, int lastIndex ) {
-		double firstX = shape.get( firstIndex ).getX1();
-		double firstY = shape.get( firstIndex ).getY1();
-		double lastX = shape.get( lastIndex ).getX2();
-		double lastY = shape.get( lastIndex ).getY2();
-
-		return Math.atan2( lastY - firstY, lastX - firstX );
-	}
-
-	public boolean isStraightLine() {
-		double fullAngle = getAngle( 0, shape.size() - 1 );
-		double maxDeltaAngle = ( Math.PI / 9.0d );
-
-		if ( shape.size() <= 1 ) {
-			return true;
-		} else {
-			for ( int i = 1; i < shape.size(); ++i ) {
-				double angle = getAngle( 0, i );
-				double dAngle = fullAngle - angle;
-				if ( dAngle > Math.PI ) {
-					dAngle -= Math.PI * 2.0d;
-				} else if ( dAngle < -Math.PI ) {
-					dAngle += Math.PI;
-				}
-
-				if ( Math.abs( dAngle ) > maxDeltaAngle ) {
-					return false;
-				}
+	public boolean isStraightLine() {		
+		Point2D[] endPoints = getEndPoints();
+		Line2D straightLine = new Line2D.Double( endPoints[0].getX(), endPoints[0].getY(), endPoints[1].getX(), endPoints[1].getY() );
+		for ( Line line : shape ) {
+			if ( straightLine.ptSegDist( new Point2D.Double( line.getX2(), line.getY2() ) ) > MAX_DIST_FROM_LINE ) {
+				return false;
 			}
-
-			return true;
 		}
+		
+		return true;
 	}
 
 	public Point2D[] getEndPoints() {
