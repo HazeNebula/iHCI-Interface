@@ -3,6 +3,7 @@ package nl.ru.ai.selforganisingmap;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -19,7 +20,7 @@ public class SelfOrganisingMap {
 	private ArrayList<DataVector> data;
 	private ArrayList<Node> nodes;
 
-	public SelfOrganisingMap( String mapFile ) {
+	public SelfOrganisingMap( URL mapFile ) {
 		readMap( mapFile );
 	}
 
@@ -69,10 +70,10 @@ public class SelfOrganisingMap {
 		}
 	}
 
-	private void readMap( String fileName ) {
+	private void readMap( URL fileName ) {
 		nodes = new ArrayList<Node>();
 
-		try ( Scanner scanner = new Scanner( new FileInputStream( fileName ) ) ) {
+		try ( Scanner scanner = new Scanner( fileName.openStream() ) ) {
 			while ( scanner.hasNext() ) {
 				String[] line = scanner.nextLine().split( "," );
 				Node node = new Node();

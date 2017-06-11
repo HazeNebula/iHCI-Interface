@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -228,10 +227,10 @@ public class DrawPanel extends JPanel {
 				state = new ActionState( ActionType_t.ADD_DRAWABLE );
 				state.setShapes( new ArrayList<Drawable>( shapes ) );
 				addToHistory( state );
-				
+
 				BufferedImage img = null;
 				try {
-					img = ImageIO.read( new File( "eiffel.png" ) );
+					img = ImageIO.read( getClass().getResource( "/resources/eiffel.png" ) );
 				} catch ( IOException exception ) {
 					System.err.println( "Could not open file\n " + exception.getMessage() );
 					return;
@@ -260,7 +259,7 @@ public class DrawPanel extends JPanel {
 						state = new ActionState( ActionType_t.ADD_DRAWABLE );
 						state.setShapes( new ArrayList<Drawable>( shapes ) );
 						addToHistory( state );
-						
+
 						Text textObject = new Text( mouseCoords.getX(), mouseCoords.getY(), text, lineColor );
 						shapes.add( textObject );
 					}
@@ -550,7 +549,7 @@ public class DrawPanel extends JPanel {
 		shapes = new ArrayList<Drawable>();
 		recognizeShape = new FreeShape( Color.BLACK, new Color( 0x00FFFFFF, true ), new BasicStroke( RECOGNIZE_STROKEWIDTH ) );
 		tool = Tool_t.RECOGNIZE;
-		map = new SelfOrganisingMap( "map\\vectors.txt" );
+		map = new SelfOrganisingMap( getClass().getResource( "/resources/map/vectors.txt" ) );
 		lastCoords = new Point( 0, 0 );
 
 		dragging = false;
@@ -570,7 +569,7 @@ public class DrawPanel extends JPanel {
 
 		this.setBackground( BACKGROUNDCOLOR );
 
-		moveButton = new JButton( new ImageIcon( "images\\icons\\MoveIcon.png" ) );
+		moveButton = new JButton( new ImageIcon( getClass().getResource( "/resources/icons/moveIcon.png" ) ) );
 		moveButton.setBackground( BUTTONCOLOR_DEFAULT );
 		moveButton.setToolTipText( TOOLTIPTEXT[0] );
 		moveButton.setActionCommand( "Move" );
@@ -578,7 +577,7 @@ public class DrawPanel extends JPanel {
 		add( moveButton );
 		moveButton.setVisible( false );
 
-		resizeButton = new JButton( new ImageIcon( "images\\icons\\ResizeIcon.png" ) );
+		resizeButton = new JButton( new ImageIcon( getClass().getResource( "/resources/icons/resizeIcon.png" ) ) );
 		resizeButton.setBackground( BUTTONCOLOR_DEFAULT );
 		resizeButton.setToolTipText( TOOLTIPTEXT[1] );
 		resizeButton.setActionCommand( "Resize" );
@@ -586,7 +585,7 @@ public class DrawPanel extends JPanel {
 		add( resizeButton );
 		resizeButton.setVisible( false );
 
-		rotateButton = new JButton( new ImageIcon( "images\\icons\\RotateIcon.png" ) );
+		rotateButton = new JButton( new ImageIcon( getClass().getResource( "/resources/icons/rotateIcon.png" ) ) );
 		rotateButton.setBackground( BUTTONCOLOR_DEFAULT );
 		rotateButton.setToolTipText( TOOLTIPTEXT[2] );
 		rotateButton.setActionCommand( "Rotate" );
@@ -594,7 +593,7 @@ public class DrawPanel extends JPanel {
 		add( rotateButton );
 		rotateButton.setVisible( false );
 
-		layerUpButton = new JButton( new ImageIcon( "images\\icons\\layerUpIcon.png" ) );
+		layerUpButton = new JButton( new ImageIcon( getClass().getResource( "/resources/icons/layerUpIcon.png" ) ) );
 		layerUpButton.setBackground( BUTTONCOLOR_DEFAULT );
 		layerUpButton.setToolTipText( TOOLTIPTEXT[3] );
 		layerUpButton.setActionCommand( "LayerUp" );
@@ -602,7 +601,7 @@ public class DrawPanel extends JPanel {
 		add( layerUpButton );
 		layerUpButton.setVisible( false );
 
-		layerDownButton = new JButton( new ImageIcon( "images\\icons\\layerDownIcon.png" ) );
+		layerDownButton = new JButton( new ImageIcon( getClass().getResource( "/resources/icons/layerDownIcon.png" ) ) );
 		layerDownButton.setBackground( BUTTONCOLOR_DEFAULT );
 		layerDownButton.setToolTipText( TOOLTIPTEXT[4] );
 		layerDownButton.setActionCommand( "LayerDown" );
@@ -610,7 +609,7 @@ public class DrawPanel extends JPanel {
 		add( layerDownButton );
 		layerDownButton.setVisible( false );
 
-		deleteButton = new JButton( new ImageIcon( "images\\icons\\DeleteIcon.png" ) );
+		deleteButton = new JButton( new ImageIcon( getClass().getResource( "/resources/icons/deleteIcon.png" ) ) );
 		deleteButton.setBackground( BUTTONCOLOR_DEFAULT );
 		deleteButton.setToolTipText( TOOLTIPTEXT[5] );
 		deleteButton.setActionCommand( "Delete" );

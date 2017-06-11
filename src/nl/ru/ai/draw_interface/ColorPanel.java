@@ -141,7 +141,7 @@ public class ColorPanel extends JPanel {
 		cyanButton.setBackground( Color.CYAN );
 		cyanButton.addActionListener( inputHandler );
 
-		noColorButton = new JButton( new ImageIcon( "images\\colors\\noColorIcon.png" ) );
+		noColorButton = new JButton( new ImageIcon( getClass().getResource( "/resources/colors/noColorIcon.png" ) ) );
 		noColorButton.setActionCommand( "NoColor" );
 		noColorButton.setBackground( Color.WHITE );
 		noColorButton.addActionListener( inputHandler );
@@ -155,7 +155,7 @@ public class ColorPanel extends JPanel {
 		lineColorButton.setSelected( true );
 		lineColorButton.addActionListener( inputHandler );
 
-		lineColorLabel = new JLabel( new ImageIcon( "images\\colors\\blackIcon.png" ) );
+		lineColorLabel = new JLabel( new ImageIcon( getClass().getResource( "/resources/colors/blackIcon.png" ) ) );
 		lineColorLabel.setToolTipText( TOOLTIPTEXT[0] );
 
 		fillColorTextLabel = new JLabel( "Fill color:" );
@@ -166,7 +166,7 @@ public class ColorPanel extends JPanel {
 		fillColorButton.setToolTipText( TOOLTIPTEXT[1] );
 		fillColorButton.addActionListener( inputHandler );
 
-		fillColorLabel = new JLabel( new ImageIcon( "images\\colors\\noColorIcon.png" ) );
+		fillColorLabel = new JLabel( new ImageIcon( getClass().getResource( "/resources/colors/noColorIcon.png" ) ) );
 		fillColorLabel.setToolTipText( TOOLTIPTEXT[1] );
 
 		ButtonGroup buttonGroup = new ButtonGroup();
@@ -177,64 +177,64 @@ public class ColorPanel extends JPanel {
 		setLayout( layout );
 		layout.setAutoCreateGaps( true );
 		layout.setAutoCreateContainerGaps( true );
-		
+
 		layout.setHorizontalGroup( 
-			layout.createSequentialGroup()
-				.addComponent( blackButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( darkGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( grayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( lightGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( whiteButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( pinkButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( redButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( orangeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( yellowButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( greenButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( blueButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( magentaButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( cyanButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( noColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addGroup( 
-					layout.createParallelGroup( GroupLayout.Alignment.LEADING )
-						.addComponent( lineColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-						.addComponent( fillColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
-				.addGroup( 
-					layout.createParallelGroup( GroupLayout.Alignment.LEADING )
-						.addComponent( lineColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-						.addComponent( fillColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
-				.addGroup( 
-					layout.createParallelGroup( GroupLayout.Alignment.LEADING )
-						.addComponent( lineColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-						.addComponent( fillColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
-		
-		layout.setVerticalGroup( 
-			layout.createParallelGroup( GroupLayout.Alignment.CENTER )
-				.addComponent( blackButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( darkGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( grayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( lightGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( whiteButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( pinkButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( redButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( orangeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( yellowButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( greenButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( blueButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( magentaButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( cyanButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addComponent( noColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-				.addGroup( 
-					layout.createSequentialGroup()
-						.addComponent( lineColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-						.addComponent( fillColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
-				.addGroup( 
-					layout.createSequentialGroup()
-						.addComponent( lineColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-						.addComponent( fillColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
-				.addGroup( 
-					layout.createSequentialGroup()
-						.addComponent( lineColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
-						.addComponent( fillColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
+				layout.createSequentialGroup()
+					.addComponent( blackButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( darkGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( grayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( lightGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( whiteButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( pinkButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( redButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( orangeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( yellowButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( greenButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( blueButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( magentaButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( cyanButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( noColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addGroup( 
+						layout.createParallelGroup( GroupLayout.Alignment.LEADING )
+							.addComponent( lineColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+							.addComponent( fillColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
+					.addGroup( 
+						layout.createParallelGroup( GroupLayout.Alignment.LEADING )
+							.addComponent( lineColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+							.addComponent( fillColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
+					.addGroup( 
+						layout.createParallelGroup( GroupLayout.Alignment.LEADING )
+							.addComponent( lineColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+							.addComponent( fillColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
+			
+			layout.setVerticalGroup( 
+				layout.createParallelGroup( GroupLayout.Alignment.CENTER )
+					.addComponent( blackButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( darkGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( grayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( lightGrayButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( whiteButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( pinkButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( redButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( orangeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( yellowButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( greenButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( blueButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( magentaButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( cyanButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addComponent( noColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+					.addGroup( 
+						layout.createSequentialGroup()
+							.addComponent( lineColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+							.addComponent( fillColorTextLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
+					.addGroup( 
+						layout.createSequentialGroup()
+							.addComponent( lineColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+							.addComponent( fillColorButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) )
+					.addGroup( 
+						layout.createSequentialGroup()
+							.addComponent( lineColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE )
+							.addComponent( fillColorLabel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE ) ) );
 	}
 
 	public void setDrawPanel( DrawPanel drawPanel ) {
@@ -298,33 +298,47 @@ public class ColorPanel extends JPanel {
 		ImageIcon icon;
 
 		if ( color.equals( Color.BLACK ) ) {
-			icon = new ImageIcon( "images\\colors\\blackIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/blackIcon.png" ) );
+
 		} else if ( color.equals( Color.DARK_GRAY ) ) {
-			icon = new ImageIcon( "images\\colors\\darkGrayIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/darkGrayIcon.png" ) );
+
 		} else if ( color.equals( Color.GRAY ) ) {
-			icon = new ImageIcon( "images\\colors\\grayIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/grayIcon.png" ) );
+
 		} else if ( color.equals( Color.LIGHT_GRAY ) ) {
-			icon = new ImageIcon( "images\\colors\\lightGrayIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/lightGrayIcon.png" ) );
+
 		} else if ( color.equals( Color.WHITE ) ) {
-			icon = new ImageIcon( "images\\colors\\whiteIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/whiteIcon.png" ) );
+
 		} else if ( color.equals( Color.PINK ) ) {
-			icon = new ImageIcon( "images\\colors\\pinkIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/pinkIcon.png" ) );
+
 		} else if ( color.equals( Color.RED ) ) {
-			icon = new ImageIcon( "images\\colors\\redIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/redIcon.png" ) );
+
 		} else if ( color.equals( Color.ORANGE ) ) {
-			icon = new ImageIcon( "images\\colors\\orangeIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/orangeIcon.png" ) );
+
 		} else if ( color.equals( Color.YELLOW ) ) {
-			icon = new ImageIcon( "images\\colors\\yellowIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/yellowIcon.png" ) );
+
 		} else if ( color.equals( Color.GREEN ) ) {
-			icon = new ImageIcon( "images\\colors\\greenIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/greenIcon.png" ) );
+
 		} else if ( color.equals( Color.BLUE ) ) {
-			icon = new ImageIcon( "images\\colors\\blueIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/blueIcon.png" ) );
+
 		} else if ( color.equals( Color.MAGENTA ) ) {
-			icon = new ImageIcon( "images\\colors\\magentaIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/magentaIcon.png" ) );
+
 		} else if ( color.equals( Color.CYAN ) ) {
-			icon = new ImageIcon( "images\\colors\\cyanIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/cyanIcon.png" ) );
+
 		} else {
-			icon = new ImageIcon( "images\\colors\\noColorIcon.png" );
+			icon = new ImageIcon( getClass().getResource( "/resources/colors/noColorIcon.png" ) );
+
 		}
 
 		return icon;
